@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class deckbehavior : MonoBehaviour
 {
+    /*
     private List<card> thedeck = new List<card>();
     //private card c1 = new card("clubs", arr[i]);
     public deckbehavior()
@@ -39,7 +40,8 @@ public class deckbehavior : MonoBehaviour
         {
             thedeck.Add(new card("hearts", arr[i]));
         }
-    }
+    */
+    
     
     void Start()
     {

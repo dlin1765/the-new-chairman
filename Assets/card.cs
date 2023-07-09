@@ -7,6 +7,7 @@ public class card : MonoBehaviour
     private string suit;
     private string number;
     private string color;
+   
     // Start is called before the first frame update
     void Start()
     {
@@ -14,12 +15,16 @@ public class card : MonoBehaviour
         
     }
 
-    public card(string s, string n)
+    public card SpawnCard()
     {
-        suit = s;
-        number = n; 
-       
+        GameObject cardCopy = Instantiate(gameObject);
+        cardCopy.gameObject.SetActive(true);
+        cardCopy.GetComponent<SpriteRenderer>().enabled = true;
+
+        card CardObjCopy = cardCopy.GetComponent<card>();
+        return CardObjCopy;
     }
+
     public void setSuit(string s)
     {
         suit = s;
