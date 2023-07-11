@@ -14,7 +14,7 @@ public class ButtController : MonoBehaviour
     public void CreateCard()
     {
         card cardCopy = _card.GetComponent<card>();
-        cardCopy.SpawnCard(player1hand, deckList[0], 1);
+        cardCopy.SpawnCard(player1hand, deckList[0], true);
         deckList.RemoveAt(0);
         Debug.Log("Hello world");
     }
@@ -47,21 +47,25 @@ public class ButtController : MonoBehaviour
             deckPrint = deckPrint + deckList[i] + " ";
         }
         Debug.Log(deckPrint);
+        
         for (int i = 0; i < 5; i++)
         {
-            /*
-            cardCopy.SpawnCard(p1hand);
-            cardCopy.SpawnCard(e1hand);
-            */
-            cardCopy.SpawnCard(player1hand, deckList[0], 1);
+            cardCopy.SpawnCard(player1hand, deckList[0], true).isPlayerCard = true;
             deckList.RemoveAt(0);
-            cardCopy.SpawnCard(enemy1hand, deckList[0], 2);
+            cardCopy.SpawnCard(enemy1hand, deckList[0], false).isPlayerCard = false;
             deckList.RemoveAt(0);
-            cardCopy.SpawnCard(enemy2hand, deckList[0], 3);
+            cardCopy.SpawnCard(enemy2hand, deckList[0], false).isPlayerCard = false;
             deckList.RemoveAt(0);
-            cardCopy.SpawnCard(enemy3hand, deckList[0], 4);
+            cardCopy.SpawnCard(enemy3hand, deckList[0], false).isPlayerCard = false;
             deckList.RemoveAt(0);
-            // cardCopy.SpawnCard(e1hand);
         }
+        /*
+        for(int i = 0; i < 5; i++)
+        {
+           
+        }
+        */    
+            // cardCopy.SpawnCard(e1hand);
+        
     }   
 }
