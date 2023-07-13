@@ -21,7 +21,7 @@ public class ButtController : MonoBehaviour
     void Start()
     {
         Debug.Log("game start");
-        _card = GameObject.Find("Card");
+            
         player1hand = GameObject.Find("player1hand");
         enemy1hand = GameObject.Find("enemy1hand");
         enemy2hand = GameObject.Find("enemy2hand");
@@ -51,6 +51,7 @@ public class ButtController : MonoBehaviour
         for (int i = 0; i < 5; i++)
         {
             cardCopy.SpawnCard(player1hand, deckList[0], true).isPlayerCard = true;
+            cardCopy.setNum(deckList[0]);
             deckList.RemoveAt(0);
             cardCopy.SpawnCard(enemy1hand, deckList[0], false).isPlayerCard = false;
             deckList.RemoveAt(0);

@@ -15,12 +15,15 @@ public class card : MonoBehaviour
     public GameObject tablehand;
     public GameObject enemy3hand;
     public GameObject Card;
-    private Vector3 temp;
+    public int num;
+    private Vector3 temp;   
     public GameObject PlayerHandController;
     private Vector3 mousePosition;
     public SpriteRenderer spriteRenderer;
     public Vector3 tablePosition; 
     public Sprite[] spriteArray;
+
+  
 
 
     // Start is called before the first frame update
@@ -53,18 +56,8 @@ public class card : MonoBehaviour
 
     public card SpawnCard(GameObject location, int cardNum, bool whichHand)
     {
-        /*
-        GameObject cardCopy = Instantiate(gameObject);
-        cardCopy.gameObject.SetActive(true);
-        cardCopy.GetComponent<SpriteRenderer>().enabled = true;
-
-        card CardObjCopy = cardCopy.GetComponent<card>();
-        CardObjCopy.transform.SetParent(player1hand.transform, false);
-        return CardObjCopy;
-        */
         Debug.Log("who's hand = " + whichHand);
         clicked = false;
-        
         player1hand = GameObject.Find("player1hand");
         enemy1hand = GameObject.Find("enemy1hand");
         enemy2hand = GameObject.Find("enemy2hand");
@@ -76,14 +69,13 @@ public class card : MonoBehaviour
         spriteRenderer = cardCopy.GetComponent<SpriteRenderer>();
         card CardObjCopy = cardCopy.GetComponent<card>();
         CardObjCopy.transform.SetParent(location.transform, false);
+        num = cardNum;
         if (whichHand)
         {
-            Debug.Log("bro how");
             isPlayerCard = true;
             PlayerHandController copy = PlayerHandController.GetComponent<PlayerHandController>();
             copy.playerHand.Add(cardNum);
             spriteRenderer.sprite = spriteArray[cardNum];
-            
         }
         else
         {
@@ -97,9 +89,9 @@ public class card : MonoBehaviour
     {
         suit = s;
     }
-    public void setNum(string n)
+    public void setNum(int n)
     {
-        number = n;
+        num = n;
     }
 
     // Update is called once per frame
@@ -128,7 +120,9 @@ public class card : MonoBehaviour
                 {
                     Debug.Log("in bounds");
                     isPlayerCard = false;
-
+                    // drop the card into the tablehand grid and remove the number from the players hand
+                    PlayerHandController copy = PlayerHandController.GetComponent<PlayerHandController>();
+                    Debug.Log(num);
                 }
                 else
                 {
@@ -136,7 +130,7 @@ public class card : MonoBehaviour
 
                 }
                 clicked = false;
-                // drop the card into the tablehand grid and remove the number from the players hand
+                
             }
             else
             {

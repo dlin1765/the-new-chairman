@@ -1273,6 +1273,7 @@ MonoBehaviour:
   tablehand: {fileID: 0}
   enemy3hand: {fileID: 0}
   Card: {fileID: 1794486849}
+  num: 0
   PlayerHandController: {fileID: 4405510501462086808}
   spriteRenderer: {fileID: 1794486850}
   tablePosition: {x: 0, y: 0, z: 0}
@@ -1519,7 +1520,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0394d1b71c35c9489c617f99ef0d879, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _card: {fileID: 0}
+  _card: {fileID: 1794486849}
   player1hand: {fileID: 0}
   enemy1hand: {fileID: 0}
   enemy2hand: {fileID: 0}
