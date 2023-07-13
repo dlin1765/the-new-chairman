@@ -14,7 +14,8 @@ public class card : MonoBehaviour
     public GameObject enemy2hand;
     public GameObject tablehand;
     public GameObject enemy3hand;
-    public GameObject Card;
+    public GameObject _card;
+    private card saveTime;
     public int num;
     private Vector3 temp;   
     public GameObject PlayerHandController;
@@ -50,7 +51,10 @@ public class card : MonoBehaviour
         }
         */
         // Debug.Log(deckList.Count);
-        
+        saveTime = _card.GetComponent<card>();
+
+
+
 
     }
 
@@ -64,22 +68,33 @@ public class card : MonoBehaviour
         enemy3hand = GameObject.Find("enemy3hand");
         tablehand = GameObject.Find("tablehand");
         tablePosition = tablehand.transform.position;
-        GameObject cardCopy = Instantiate(Card, new Vector3(0, 0, 0), Quaternion.identity);
+        
+        GameObject cardCopy = Instantiate(_card, new Vector3(0, 0, 0), Quaternion.identity);
         cardCopy.gameObject.SetActive(true);
         spriteRenderer = cardCopy.GetComponent<SpriteRenderer>();
         card CardObjCopy = cardCopy.GetComponent<card>();
         CardObjCopy.transform.SetParent(location.transform, false);
-        num = cardNum;
+        CardObjCopy.num = cardNum;
+     
+        /*
+        Card = Instantiate(Card, new Vector3(0, 0, 0), Quaternion.identity);
+        Card.gameObject.SetActive(true);
+        spriteRenderer = Card.GetComponent<SpriteRenderer>();
+        card CardObjCopy = Card.GetComponent<card>();
+        CardObjCopy.transform.SetParent(location.transform, false);
+        */
+        
+
         if (whichHand)
         {
-            isPlayerCard = true;
-            PlayerHandController copy = PlayerHandController.GetComponent<PlayerHandController>();
+            PlayerHandController copy = CardObjCopy.PlayerHandController.GetComponent<PlayerHandController>();
             copy.playerHand.Add(cardNum);
+            CardObjCopy.isPlayerCard = true;
             spriteRenderer.sprite = spriteArray[cardNum];
         }
         else
         {
-            isPlayerCard = false;
+            CardObjCopy.isPlayerCard = false;
         }
         Debug.Log(isPlayerCard);
         return CardObjCopy;
@@ -114,7 +129,7 @@ public class card : MonoBehaviour
             if (clicked == true)
             {
 
-                Debug.Log("mouse x = " + mousePosition.x + " mouse y = " + mousePosition.y);
+                Debug.Log("mouse x = " + mousePosition.x + " mouse y = " + mousePosition.y);    
 
                 if (mousePosition.x > arr[0].x && mousePosition.x < arr[2].x && mousePosition.y > arr[0].y && mousePosition.y < arr[1].y)
                 {
@@ -122,7 +137,21 @@ public class card : MonoBehaviour
                     isPlayerCard = false;
                     // drop the card into the tablehand grid and remove the number from the players hand
                     PlayerHandController copy = PlayerHandController.GetComponent<PlayerHandController>();
-                    Debug.Log(num);
+                    TableHandController copy1 = tablehand.GetComponent<TableHandController>();
+                    saveTime.transform.SetParent(tablehand.transform, false);
+                    copy1.tablesHand.Add(num);
+                    int index1 = 0;
+                    for (int i = 0; i < copy.playerHand.Count; i++)
+                    {
+                        if(copy.playerHand[i] == num)
+                        {
+                            index1 = i;
+                            break;
+                        }
+                    }
+                    
+                    copy.playerHand.RemoveAt(index1);
+                   
                 }
                 else
                 {
