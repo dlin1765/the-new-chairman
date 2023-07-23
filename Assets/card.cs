@@ -149,8 +149,11 @@ public class card : MonoBehaviour
                             break;
                         }
                     }
-                    
                     copy.playerHand.RemoveAt(index1);
+                    if(copy1.isFull())
+                    {
+                        copy1.readdCards();
+                    }
                    
                 }
                 else

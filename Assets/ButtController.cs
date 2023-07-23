@@ -9,7 +9,13 @@ public class ButtController : MonoBehaviour
     public GameObject enemy1hand;
     public GameObject enemy2hand;
     public GameObject enemy3hand;
+    public GameObject StartButton;
+    public GameObject startingText;
+    public GameObject nameText;
+    public GameObject DialogManager;
+    
     private string deckPrint;
+    public int turn;
     public List<int> deckList;
     public void CreateCard()
     {
@@ -22,9 +28,17 @@ public class ButtController : MonoBehaviour
     {
         Debug.Log("game start");
         player1hand = GameObject.Find("player1hand");
+       
+        startingText.SetActive(true);
+        nameText.SetActive(true);
         enemy1hand = GameObject.Find("enemy1hand");
         enemy2hand = GameObject.Find("enemy2hand");
         enemy3hand = GameObject.Find("enemy3hand");
+        StartButton = GameObject.Find("StartButton");
+        DialogManager copy = DialogManager.GetComponent<DialogManager>();
+
+        copy.StartDialogue("The rules are simple, the first rule is there's no talking, the second is that there's no talking about the rules", "???");
+        
         card cardCopy = _card.GetComponent<card>();
         // player1hand p1hand = player1hand.GetComponent<player1hand>();
         //enemy1hand e1hand = enemy1hand.GetComponent<enemy1hand>();
@@ -42,7 +56,7 @@ public class ButtController : MonoBehaviour
             cardCopy.SpawnCard(enemy3hand, deckList[0], false);
             deckList.RemoveAt(0);
         }
-
+        Destroy(StartButton.gameObject);
     }
     void Start()
     {
@@ -59,7 +73,11 @@ public class ButtController : MonoBehaviour
             deckList[i] = deckList[randomNumber];
             deckList[randomNumber] = temp;
         }
+       // startingText = GameObject.Find("Text");
+        startingText.SetActive(false);
+        nameText.SetActive(false);
         
+
         /*
 
          player1hand = GameObject.Find("player1hand");
