@@ -2,6 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public struct DialogueSet
+{
+    public string name;
+    public string dialogue; 
+
+    public DialogueSet(string n, string d)
+    {
+        this.name = n;
+        dialogue = d;
+    }
+};
+
+
 public class ButtController : MonoBehaviour
 {
     public GameObject _card;
@@ -36,8 +49,19 @@ public class ButtController : MonoBehaviour
         enemy3hand = GameObject.Find("enemy3hand");
         StartButton = GameObject.Find("StartButton");
         DialogManager copy = DialogManager.GetComponent<DialogManager>();
+        List<DialogueSet> startWords = new List<DialogueSet>();
+        DialogueSet line1 = new DialogueSet("???", "The rules are simple");
+        DialogueSet line2 = new DialogueSet("???", "The first rule, is that there is no talking");
+        DialogueSet line3 = new DialogueSet("???", "The second rule is that there is NO talking about the rules");
+        DialogueSet line4 = new DialogueSet("???", "I will start, and the turn order will be clockwise");
+        DialogueSet line5 = new DialogueSet("???", "Start game.");
+        startWords.Add(line1);
+        startWords.Add(line2);
+        startWords.Add(line3);
+        startWords.Add(line4);
+        startWords.Add(line5);
 
-        copy.StartDialogue("The rules are simple, the first rule is there's no talking, the second is that there's no talking about the rules", "???");
+        copy.StartDialogue(startWords);
         
         card cardCopy = _card.GetComponent<card>();
         // player1hand p1hand = player1hand.GetComponent<player1hand>();
