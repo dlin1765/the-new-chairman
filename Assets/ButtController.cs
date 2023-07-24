@@ -25,17 +25,23 @@ public class ButtController : MonoBehaviour
     public GameObject StartButton;
     public GameObject startingText;
     public GameObject nameText;
-    public GameObject DialogManager;
+    public GameObject _dialogue;
     
     private string deckPrint;
     public int turn;
     public List<int> deckList;
     public void CreateCard()
     {
-        card cardCopy = _card.GetComponent<card>();
-        cardCopy.SpawnCard(player1hand, deckList[0], true);
-        deckList.RemoveAt(0);
-        Debug.Log("Hello world");
+        
+        DialogManager dialogue = _dialogue.GetComponent<DialogManager>();
+        if (!dialogue.isDialogue)
+        {
+            card cardCopy = _card.GetComponent<card>();
+            cardCopy.SpawnCard(player1hand, deckList[0], true);
+            deckList.RemoveAt(0);
+        }
+        
+       
     }
     public void StartGame()
     {
@@ -48,7 +54,7 @@ public class ButtController : MonoBehaviour
         enemy2hand = GameObject.Find("enemy2hand");
         enemy3hand = GameObject.Find("enemy3hand");
         StartButton = GameObject.Find("StartButton");
-        DialogManager copy = DialogManager.GetComponent<DialogManager>();
+        DialogManager copy = _dialogue.GetComponent<DialogManager>();
         List<DialogueSet> startWords = new List<DialogueSet>();
         DialogueSet line1 = new DialogueSet("???", "The rules are simple");
         DialogueSet line2 = new DialogueSet("???", "The first rule, is that there is no talking");

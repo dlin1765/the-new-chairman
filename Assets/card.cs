@@ -15,6 +15,7 @@ public class card : MonoBehaviour
     public GameObject tablehand;
     public GameObject enemy3hand;
     public GameObject _card;
+    public GameObject _dialogue;
     private card saveTime;
     public int num;
     private Vector3 temp;   
@@ -52,7 +53,7 @@ public class card : MonoBehaviour
         */
         // Debug.Log(deckList.Count);
         saveTime = _card.GetComponent<card>();
-
+        
 
 
 
@@ -121,55 +122,64 @@ public class card : MonoBehaviour
     }
     void OnMouseDown()
     {
-        Vector3[] arr = new Vector3[4];
-        tablehand.GetComponent<RectTransform>().GetWorldCorners(arr);
-
-        if (isPlayerCard)
+        DialogManager dialogue = _dialogue.GetComponent<DialogManager>();
+        if (dialogue.isDialogue)
         {
-            if (clicked == true)
+
+        }
+        else
+        {
+            Vector3[] arr = new Vector3[4];
+            tablehand.GetComponent<RectTransform>().GetWorldCorners(arr);
+
+            if (isPlayerCard)
             {
-
-                Debug.Log("mouse x = " + mousePosition.x + " mouse y = " + mousePosition.y);    
-
-                if (mousePosition.x > arr[0].x && mousePosition.x < arr[2].x && mousePosition.y > arr[0].y && mousePosition.y < arr[1].y)
+                if (clicked == true)
                 {
-                    Debug.Log("in bounds");
-                    isPlayerCard = false;
-                    // drop the card into the tablehand grid and remove the number from the players hand
-                    PlayerHandController copy = PlayerHandController.GetComponent<PlayerHandController>();
-                    TableHandController copy1 = tablehand.GetComponent<TableHandController>();
-                    saveTime.transform.SetParent(tablehand.transform, false);
-                    copy1.tablesHand.Add(num);
-                    int index1 = 0;
-                    for (int i = 0; i < copy.playerHand.Count; i++)
+
+                    Debug.Log("mouse x = " + mousePosition.x + " mouse y = " + mousePosition.y);
+
+                    if (mousePosition.x > arr[0].x && mousePosition.x < arr[2].x && mousePosition.y > arr[0].y && mousePosition.y < arr[1].y)
                     {
-                        if(copy.playerHand[i] == num)
+                        Debug.Log("in bounds");
+                        isPlayerCard = false;
+                        // drop the card into the tablehand grid and remove the number from the players hand
+                        PlayerHandController copy = PlayerHandController.GetComponent<PlayerHandController>();
+                        TableHandController copy1 = tablehand.GetComponent<TableHandController>();
+                        saveTime.transform.SetParent(tablehand.transform, false);
+                        copy1.tablesHand.Add(num);
+                        int index1 = 0;
+                        for (int i = 0; i < copy.playerHand.Count; i++)
                         {
-                            index1 = i;
-                            break;
+                            if (copy.playerHand[i] == num)
+                            {
+                                index1 = i;
+                                break;
+                            }
                         }
+                        copy.playerHand.RemoveAt(index1);
+                        if (copy1.isFull())
+                        {
+                            copy1.readdCards();
+                        }
+
                     }
-                    copy.playerHand.RemoveAt(index1);
-                    if(copy1.isFull())
+                    else
                     {
-                        copy1.readdCards();
+                        transform.position = temp;
+
                     }
-                   
+                    clicked = false;
+
                 }
                 else
                 {
-                    transform.position = temp;
+                    temp = transform.position;
+                    clicked = true;
 
                 }
-                clicked = false;
-                
             }
-            else
-            {
-                temp = transform.position;
-                clicked = true;
 
-            }
         }
             
     }

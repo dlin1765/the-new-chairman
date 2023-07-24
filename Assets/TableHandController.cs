@@ -64,16 +64,16 @@ public class TableHandController : MonoBehaviour
         GameObject cardTemp = GameObject.Find("card");
         ButtController copy1 = copy.GetComponent<ButtController>();
         var tableTransform = this.transform;
-      
-        for (int i = 0; i < tablesHand.Count - 1; i++)
+        int temp = tablesHand.Count;
+        for (int i = 0; i < temp - 1; i++)
         {
-            
-            Debug.Log("hello am i working");
             copy1.deckList.Add(tablesHand[i]);
+            
             Destroy(tableTransform.GetChild(i).gameObject); 
             //_card 
             
         }
+        tablesHand.RemoveRange(0, temp - 1);
         /*
         for (int i = 0; i < tablesHand.Count; i++)
         {
