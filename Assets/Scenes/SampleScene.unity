@@ -1404,7 +1404,7 @@ MonoBehaviour:
   m_ChildAlignment: 4
   m_StartCorner: 2
   m_StartAxis: 1
-  m_CellSize: {x: 25, y: 89.7612}
+  m_CellSize: {x: 50, y: 89.7612}
   m_Spacing: {x: 0, y: 0}
   m_Constraint: 2
   m_ConstraintCount: 1
@@ -1647,6 +1647,7 @@ MonoBehaviour:
   tablehand: {fileID: 0}
   enemy3hand: {fileID: 0}
   _card: {fileID: 1794486849}
+  _dialogue: {fileID: 355645718}
   num: 0
   PlayerHandController: {fileID: 4405510501462086808}
   spriteRenderer: {fileID: 1794486850}
@@ -2099,7 +2100,7 @@ MonoBehaviour:
   StartButton: {fileID: 1988306341}
   startingText: {fileID: 378855972}
   nameText: {fileID: 599938148}
-  DialogManager: {fileID: 355645718}
+  _dialogue: {fileID: 355645718}
   turn: 0
   deckList: 
 --- !u!4 &2128865613
