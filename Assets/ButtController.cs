@@ -26,7 +26,7 @@ public class ButtController : MonoBehaviour
     public GameObject startingText;
     public GameObject nameText;
     public GameObject _dialogue;
-    
+    public bool started = false;
     private string deckPrint;
     public int turn;
     public List<int> deckList;
@@ -34,7 +34,7 @@ public class ButtController : MonoBehaviour
     {
         
         DialogManager dialogue = _dialogue.GetComponent<DialogManager>();
-        if (!dialogue.isDialogue)
+        if (!dialogue.isDialogue && started == true)
         {
             card cardCopy = _card.GetComponent<card>();
             cardCopy.SpawnCard(player1hand, deckList[0], true);
@@ -47,7 +47,7 @@ public class ButtController : MonoBehaviour
     {
         Debug.Log("game start");
         player1hand = GameObject.Find("player1hand");
-       
+        started = true;
         startingText.SetActive(true);
         nameText.SetActive(true);
         enemy1hand = GameObject.Find("enemy1hand");

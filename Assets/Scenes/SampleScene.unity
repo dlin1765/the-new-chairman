@@ -274,8 +274,10 @@ MonoBehaviour:
   nameText: {fileID: 599938149}
   box: {fileID: 1450237924}
   isDialogue: 0
+  firstTalk: 1
   sT: 
   nT: 
+  enemyAI: {fileID: 2093681622}
 --- !u!4 &355645720
 Transform:
   m_ObjectHideFlags: 0
@@ -1968,6 +1970,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 41fc7621aa6e76f439fbd2b9687dde5c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  animator: {fileID: 0}
+  turnOrder: 0
+  started: 0
 --- !u!1 &2117655113
 GameObject:
   m_ObjectHideFlags: 0
@@ -2101,6 +2106,7 @@ MonoBehaviour:
   startingText: {fileID: 378855972}
   nameText: {fileID: 599938148}
   _dialogue: {fileID: 355645718}
+  started: 0
   turn: 0
   deckList: 
 --- !u!4 &2128865613

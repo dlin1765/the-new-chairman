@@ -13,10 +13,11 @@ public class DialogManager : MonoBehaviour
     public Text nameText;
     public GameObject box;
     public bool isDialogue = false;
+    public bool firstTalk = true;
     public string sT;
     public string nT;
     public List<DialogueSet> dialogueList;
-
+    public GameObject enemyAI;
     void Start()
     {
         dialogueList = new List<DialogueSet>();
@@ -36,6 +37,7 @@ public class DialogManager : MonoBehaviour
 
     public void StartDialogue(List<DialogueSet> d)
     {
+        
 
         for (int i = 0; i < d.Count; i++)
         {
@@ -58,7 +60,8 @@ public class DialogManager : MonoBehaviour
 
 
     }
-    public void skipDialogue()
+    
+        public void skipDialogue()
     {
         if (dialogueList.Count > 0)
         {
@@ -72,6 +75,14 @@ public class DialogManager : MonoBehaviour
             startingText.gameObject.SetActive(false);
             nameText.gameObject.SetActive(false);
             box.gameObject.SetActive(false);
+            if(firstTalk)
+            {
+                EnemyHandController ai = enemyAI.GetComponent<EnemyHandController>();
+                ai.animator.SetBool("started", true);
+                Debug.Log("hello????");
+                firstTalk = false;
+            }
+            // add functionality to set firstTalk back to true if you go back to start menu which i haven't done yet but will  
         }
         if (dialogueList.Count > 0)
         {
