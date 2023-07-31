@@ -58,6 +58,10 @@ public class card : MonoBehaviour
 
 
     }
+    public void flipCard()
+    {
+        spriteRenderer.sprite = spriteArray[num];
+    }
 
     public card SpawnCard(GameObject location, int cardNum, bool whichHand, int whichHands)
     {
@@ -126,6 +130,10 @@ public class card : MonoBehaviour
             transform.position = mousePosition;
         }
     }
+    public void toTable()
+    {
+        saveTime.transform.SetParent(tablehand.transform, false);
+    }
     void OnMouseDown()
     {
         DialogManager dialogue = _dialogue.GetComponent<DialogManager>();
@@ -168,6 +176,9 @@ public class card : MonoBehaviour
                         {
                             copy1.readdCards();
                         }
+
+
+                        // here is where i will detect if the player dropped a card onto the table while its not their turn
 
                     }
                     else
