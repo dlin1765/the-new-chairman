@@ -37,7 +37,7 @@ public class ButtController : MonoBehaviour
         if (!dialogue.isDialogue && started == true)
         {
             card cardCopy = _card.GetComponent<card>();
-            cardCopy.SpawnCard(player1hand, deckList[0], true);
+            cardCopy.SpawnCard(player1hand, deckList[0], true, 0);
             deckList.RemoveAt(0);
         }
         
@@ -45,7 +45,7 @@ public class ButtController : MonoBehaviour
     }
     public void StartGame()
     {
-        Debug.Log("game start");
+        
         player1hand = GameObject.Find("player1hand");
         started = true;
         startingText.SetActive(true);
@@ -77,13 +77,13 @@ public class ButtController : MonoBehaviour
         for (int i = 0; i < 5; i++)
         {
 
-            cardCopy.SpawnCard(player1hand, deckList[0], true);
+            cardCopy.SpawnCard(player1hand, deckList[0], true, 0);
             deckList.RemoveAt(0);
-            cardCopy.SpawnCard(enemy1hand, deckList[0], false);
+            cardCopy.SpawnCard(enemy1hand, deckList[0], false, 1);
             deckList.RemoveAt(0);
-            cardCopy.SpawnCard(enemy2hand, deckList[0], false);
+            cardCopy.SpawnCard(enemy2hand, deckList[0], false, 2);
             deckList.RemoveAt(0);
-            cardCopy.SpawnCard(enemy3hand, deckList[0], false);
+            cardCopy.SpawnCard(enemy3hand, deckList[0], false, 3);
             deckList.RemoveAt(0);
         }
         Destroy(StartButton.gameObject);
@@ -107,68 +107,5 @@ public class ButtController : MonoBehaviour
         startingText.SetActive(false);
         nameText.SetActive(false);
         
-
-        /*
-
-         player1hand = GameObject.Find("player1hand");
-         enemy1hand = GameObject.Find("enemy1hand");
-         enemy2hand = GameObject.Find("enemy2hand");
-         enemy3hand = GameObject.Find("enemy3hand");
-         card cardCopy = _card.GetComponent<card>();
-         // player1hand p1hand = player1hand.GetComponent<player1hand>();
-         //enemy1hand e1hand = enemy1hand.GetComponent<enemy1hand>();
-         deckList = new List<int>();
-         for (int i = 0; i < 52; i++)
-         {
-             deckList.Add(i);
-         }
-         for (int i = 0; i < 52; i++)
-         {
-             int temp = deckList[i];
-             int randomNumber = Random.Range(0, 52);
-             deckList[i] = deckList[randomNumber];
-             deckList[randomNumber] = temp;
-         }
-
-         for (int i = 0; i < 52; i++)
-         {
-             deckPrint = deckPrint + deckList[i] + " ";
-         }
-         Debug.Log(deckPrint);
-         /
-         for (int i = 0; i < 5; i++)
-         {
-
-             cardCopy.SpawnCard(player1hand, deckList[0], true).isPlayerCard = true;
-             cardCopy.setNum(deckList[0]);
-             deckList.RemoveAt(0);
-             cardCopy.SpawnCard(enemy1hand, deckList[0], false).isPlayerCard = false;
-             deckList.RemoveAt(0);
-             cardCopy.SpawnCard(enemy2hand, deckList[0], false).isPlayerCard = false;
-             deckList.RemoveAt(0);
-             cardCopy.SpawnCard(enemy3hand, deckList[0], false).isPlayerCard = false;
-             deckList.RemoveAt(0);
-
-             cardCopy.SpawnCard(player1hand, deckList[0], true);
-             deckList.RemoveAt(0);
-             cardCopy.SpawnCard(enemy1hand, deckList[0], false);
-             deckList.RemoveAt(0);
-             cardCopy.SpawnCard(enemy2hand, deckList[0], false);
-             deckList.RemoveAt(0);
-             cardCopy.SpawnCard(enemy3hand, deckList[0], false);
-             deckList.RemoveAt(0);
-         }
-
-
-
-         for(int i = 0; i < 5; i++)
-         {
-
-         }
-
-         // cardCopy.SpawnCard(e1hand);
-         //cardCopy.SpawnCard(player1hand, deckList[0], true);
-         //deckList.RemoveAt(0);
-         */
     }   
 }

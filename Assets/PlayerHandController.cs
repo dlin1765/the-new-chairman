@@ -31,4 +31,11 @@ public class PlayerHandController : MonoBehaviour
     {
         
     }
+    public void printDeck()
+    {
+        for(int i = 0; i < playerHand.Count; i++)
+        {
+            Debug.Log(playerHand[i] + " ");
+        }
+    }
 }

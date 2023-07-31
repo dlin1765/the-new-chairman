@@ -18,6 +18,8 @@ public class DialogManager : MonoBehaviour
     public string nT;
     public List<DialogueSet> dialogueList;
     public GameObject enemyAI;
+    public GameObject GameControllerCopy;
+
     void Start()
     {
         dialogueList = new List<DialogueSet>();
@@ -61,7 +63,7 @@ public class DialogManager : MonoBehaviour
 
     }
     
-        public void skipDialogue()
+    public void skipDialogue()
     {
         if (dialogueList.Count > 0)
         {
@@ -78,8 +80,10 @@ public class DialogManager : MonoBehaviour
             if(firstTalk)
             {
                 EnemyHandController ai = enemyAI.GetComponent<EnemyHandController>();
-                ai.animator.SetBool("started", true);
-                Debug.Log("hello????");
+                //ai.animator.SetBool("started", true);
+              
+                GameControl gC = GameControllerCopy.GetComponent<GameControl>();
+                gC.StartGame();
                 firstTalk = false;
             }
             // add functionality to set firstTalk back to true if you go back to start menu which i haven't done yet but will  

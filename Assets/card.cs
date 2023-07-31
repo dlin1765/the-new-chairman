@@ -25,7 +25,7 @@ public class card : MonoBehaviour
     public Vector3 tablePosition; 
     public Sprite[] spriteArray;
 
-  
+    EnemyHandController enemy1;
 
 
     // Start is called before the first frame update
@@ -53,15 +53,15 @@ public class card : MonoBehaviour
         */
         // Debug.Log(deckList.Count);
         saveTime = _card.GetComponent<card>();
-        
+        enemy1 = enemy1hand.GetComponent<EnemyHandController>();
 
 
 
     }
 
-    public card SpawnCard(GameObject location, int cardNum, bool whichHand)
+    public card SpawnCard(GameObject location, int cardNum, bool whichHand, int whichHands)
     {
-        Debug.Log("who's hand = " + whichHand);
+       
         clicked = false;
         player1hand = GameObject.Find("player1hand");
         enemy1hand = GameObject.Find("enemy1hand");
@@ -95,9 +95,15 @@ public class card : MonoBehaviour
         }
         else
         {
+            if(whichHands == 1)
+            {
+                enemy1.enemyHand.Add(cardNum);
+            }
+            // HERE IS WHERE THE OTHER ENEMIES WILL GET THE CARDS BUT I THINK THERES A BETTER WAY TO CODE THIS SO IMMA JUST KEEP IT BLANK FOR NOW
             CardObjCopy.isPlayerCard = false;
+            
         }
-        Debug.Log(isPlayerCard);
+       
         return CardObjCopy;
     }
 
@@ -141,7 +147,7 @@ public class card : MonoBehaviour
 
                     if (mousePosition.x > arr[0].x && mousePosition.x < arr[2].x && mousePosition.y > arr[0].y && mousePosition.y < arr[1].y)
                     {
-                        Debug.Log("in bounds");
+                       
                         isPlayerCard = false;
                         // drop the card into the tablehand grid and remove the number from the players hand
                         PlayerHandController copy = PlayerHandController.GetComponent<PlayerHandController>();

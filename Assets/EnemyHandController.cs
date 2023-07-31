@@ -10,6 +10,14 @@ public class EnemyHandController : MonoBehaviour
     public int turnOrder;
     public bool started;
 
+    public GameObject _card;
+    public GameObject player1hand;
+    public GameObject enemy1hand;
+    public GameObject enemy2hand; 
+    public GameObject enemy3hand;
+    public GameObject _deck;
+    public List<int> enemyHand;
+    private string deckPrint;
 
     void Start()
     {
@@ -20,21 +28,14 @@ public class EnemyHandController : MonoBehaviour
     void Update()
     {
         
-        if (animator.GetBool("started") && animator.GetInteger("turnOrder") != 2)
+         
+    }
+
+    public void printDeck()
+    {
+        for (int i = 0; i < enemyHand.Count; i++)
         {
-            
-            while(animator.GetInteger("turnOrder") != 2)
-            {
-                
-                
-            }
-            
-            
+            Debug.Log(enemyHand[i] + " ");
         }
-        else
-        {
-            
-        }
-        
     }
 }
