@@ -12,6 +12,8 @@ public class PlayerHandController : MonoBehaviour
     public GameObject _deck;
     public List<int> playerHand;
     private string deckPrint;
+    public bool played = false;
+    public int numCards;
     // Start is called before the first frame update
     void Start()
     {
@@ -23,6 +25,7 @@ public class PlayerHandController : MonoBehaviour
         enemy3hand = GameObject.Find("enemy3hand");
         card cardCopy = _card.GetComponent<card>();
         playerHand = new List<int>();
+        numCards = 0;
       
     }
 

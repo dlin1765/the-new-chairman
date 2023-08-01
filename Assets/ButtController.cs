@@ -68,12 +68,10 @@ public class ButtController : MonoBehaviour
         startWords.Add(line5);
 
         copy.StartDialogue(startWords);
-        
         card cardCopy = _card.GetComponent<card>();
         // player1hand p1hand = player1hand.GetComponent<player1hand>();
         //enemy1hand e1hand = enemy1hand.GetComponent<enemy1hand>();
-        
-        
+
         for (int i = 0; i < 5; i++)
         {
 

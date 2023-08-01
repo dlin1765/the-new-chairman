@@ -15,14 +15,18 @@ public class GameControl : MonoBehaviour
     public GameObject tableTop;
     public Sprite[] spriteArray;
     public GameState state;
+    public bool cardPlayed = false;
     PlayerHandController p1;
     EnemyHandController e1;
     ButtController d1;
-    TableHandController t1; 
+    TableHandController t1;
+    public int cardTracker;
+    public int turnOrder;
     // Start is called before the first frame update
     void Start()
     {
         state = GameState.START;
+        turnOrder = 0;
     }
 
     void Update()
@@ -46,18 +50,21 @@ public class GameControl : MonoBehaviour
         d1 = deckHandCopy.GetComponent<ButtController>();
         t1 = tableTop.GetComponent<TableHandController>();
         state = GameState.ENEMYTURN;
-        enemyTurn();
+        StartCoroutine(enemyTurn());
         //p1.printDeck();
     }
 
 
-    private void enemyTurn()
+    IEnumerator enemyTurn()
     {
         // implement some kind of coroutine to make it so it pauses between turns 
-        e1.printDeck();
+        //e1.printDeck();
+        // start another coroutine that checks if the player has placed a card on the table top 
+        yield return new WaitForSeconds(2f);
         int pickOrder = 0; 
         if (t1.tablesHand.Count != 0)
         {
+            // implement the rules here 
             pickOrder = 0;      
         }
         GameObject copy = GameObject.Find("ButtonController");
@@ -71,9 +78,84 @@ public class GameControl : MonoBehaviour
         enemyTransform.GetChild(pickOrder).gameObject.GetComponent<SpriteRenderer>().sprite = spriteArray[e1.enemyHand[pickOrder]];
         enemyTransform.GetChild(pickOrder).gameObject.transform.SetParent(tableTransform, false);
         e1.enemyHand.RemoveAt(pickOrder);
+
+        // remember to add functionality to skip turns with aces by upping turn order by 2
+        turnOrder++;
+        // have to change it to player turn
+        if(turnOrder == 1)
+        {
+
+        }
+        else if(turnOrder == 2)
+        {
+
+        }
+        else if(turnOrder == 2)
+        {
+
+        }
+        else if(turnOrder == 3)
+        {
+
+        }
+        else
+        {
+            Debug.Log("This should never happennn");
+        }
+        state = GameState.PLAYERTURN;
+        p1.numCards = p1.playerHand.Count;
+        cardTracker = p1.numCards;
+        StartCoroutine(playerTurn());
+        // if statement to change the state to the correct one 
+
+    }
+    
+    IEnumerator playerTurn()
+    {
+        yield return new WaitUntil(() => playedCard());
+
+        Debug.Log("player finished");
+        state = GameState.ENEMYTURN;
+        StartCoroutine(enemyTurn());
+        // check if a card has been dropped on the table, if yes, change the state back to the enemy turn
+        // add functionality to check if a player dropped a card during enemy turn, debug.log("playing out of order")
         
 
-
-        //tablesHand.RemoveRange(0, temp - 1);
     }
+    
+
+    public bool playedCard()
+    {
+        /*
+        if(state == GameState.PLAYERTURN)
+        {
+            Debug.Log("good play");
+            return true;
+        }
+        else
+        {
+            Debug.Log("bad play");
+            return false;
+        }
+        */
+        if (state == GameState.PLAYERTURN)
+        {
+            if (cardTracker - 1 == p1.playerHand.Count || cardTracker + 1 == p1.playerHand.Count)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else
+        {
+            
+            return false;
+        }
+    }
+  
+    
+    
 }

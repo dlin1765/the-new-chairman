@@ -1020,6 +1020,9 @@ MonoBehaviour:
   - {fileID: -686530315640835919, guid: 343925506c01eb140846a4d86d5bcf87, type: 3}
   - {fileID: -1287802295239891605, guid: 343925506c01eb140846a4d86d5bcf87, type: 3}
   state: 0
+  cardPlayed: 0
+  cardTracker: 0
+  turnOrder: 0
 --- !u!4 &969040271
 Transform:
   m_ObjectHideFlags: 0
@@ -1815,6 +1818,7 @@ MonoBehaviour:
   - {fileID: -7651852777716115994, guid: 343925506c01eb140846a4d86d5bcf87, type: 3}
   - {fileID: -686530315640835919, guid: 343925506c01eb140846a4d86d5bcf87, type: 3}
   - {fileID: -1287802295239891605, guid: 343925506c01eb140846a4d86d5bcf87, type: 3}
+  GameControllerCopy: {fileID: 969040269}
 --- !u!1 &1821933850
 GameObject:
   m_ObjectHideFlags: 0
@@ -2483,6 +2487,8 @@ MonoBehaviour:
   enemy3hand: {fileID: 0}
   _deck: {fileID: 731929155}
   playerHand: 
+  played: 0
+  numCards: 0
 --- !u!1001 &7967396191396533074
 PrefabInstance:
   m_ObjectHideFlags: 0

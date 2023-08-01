@@ -24,8 +24,9 @@ public class card : MonoBehaviour
     public SpriteRenderer spriteRenderer;
     public Vector3 tablePosition; 
     public Sprite[] spriteArray;
-
+    public GameObject GameControllerCopy;
     EnemyHandController enemy1;
+    GameControl gc;
 
 
     // Start is called before the first frame update
@@ -54,9 +55,7 @@ public class card : MonoBehaviour
         // Debug.Log(deckList.Count);
         saveTime = _card.GetComponent<card>();
         enemy1 = enemy1hand.GetComponent<EnemyHandController>();
-
-
-
+        gc = GameControllerCopy.GetComponent<GameControl>();
     }
     public void flipCard()
     {
@@ -136,6 +135,8 @@ public class card : MonoBehaviour
     }
     void OnMouseDown()
     {
+        PlayerHandController copy = PlayerHandController.GetComponent<PlayerHandController>();
+        TableHandController copy1 = tablehand.GetComponent<TableHandController>();
         DialogManager dialogue = _dialogue.GetComponent<DialogManager>();
         if (dialogue.isDialogue)
         {
@@ -143,6 +144,7 @@ public class card : MonoBehaviour
         }
         else
         {
+            copy.played = false;
             Vector3[] arr = new Vector3[4];
             tablehand.GetComponent<RectTransform>().GetWorldCorners(arr);
 
@@ -158,8 +160,7 @@ public class card : MonoBehaviour
                        
                         isPlayerCard = false;
                         // drop the card into the tablehand grid and remove the number from the players hand
-                        PlayerHandController copy = PlayerHandController.GetComponent<PlayerHandController>();
-                        TableHandController copy1 = tablehand.GetComponent<TableHandController>();
+                        
                         saveTime.transform.SetParent(tablehand.transform, false);
                         copy1.tablesHand.Add(num);
                         int index1 = 0;
@@ -171,6 +172,9 @@ public class card : MonoBehaviour
                                 break;
                             }
                         }
+                        Debug.Log("a;sldkjfalskjdfasdf");
+                        gc.playedCard();
+                        copy.played = true;
                         copy.playerHand.RemoveAt(index1);
                         if (copy1.isFull())
                         {
@@ -183,16 +187,18 @@ public class card : MonoBehaviour
                     }
                     else
                     {
+                        copy.played = false;
                         transform.position = temp;
 
                     }
                     clicked = false;
 
                 }
-                else
+                else // this is when the mouse first clicks on the card in the player hand to pick it up
                 {
                     temp = transform.position;
                     clicked = true;
+                    Debug.Log("reminder whhen this happens");
 
                 }
             }
