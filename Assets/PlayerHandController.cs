@@ -41,4 +41,16 @@ public class PlayerHandController : MonoBehaviour
             Debug.Log(playerHand[i] + " ");
         }
     }
+
+    public bool isClicked()
+    {
+        for(int i = 0; i < playerHand.Count; i++)
+        {
+            if(this.transform.GetChild(i).GetComponent<card>().clicked)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
 }

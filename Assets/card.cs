@@ -153,11 +153,14 @@ public class card : MonoBehaviour
                 if (clicked == true)
                 {
 
-                    Debug.Log("mouse x = " + mousePosition.x + " mouse y = " + mousePosition.y);
+                   
 
                     if (mousePosition.x > arr[0].x && mousePosition.x < arr[2].x && mousePosition.y > arr[0].y && mousePosition.y < arr[1].y)
                     {
-                       
+                       if (gc.state == gc.getState())
+                        {
+                            Debug.Log("playing out of order");
+                        }
                         isPlayerCard = false;
                         // drop the card into the tablehand grid and remove the number from the players hand
                         
@@ -172,8 +175,9 @@ public class card : MonoBehaviour
                                 break;
                             }
                         }
-                        Debug.Log("a;sldkjfalskjdfasdf");
-                        gc.playedCard();
+                 
+                        bool l = gc.playedCard();
+                        
                         copy.played = true;
                         copy.playerHand.RemoveAt(index1);
                         if (copy1.isFull())
@@ -198,7 +202,7 @@ public class card : MonoBehaviour
                 {
                     temp = transform.position;
                     clicked = true;
-                    Debug.Log("reminder whhen this happens");
+                   
 
                 }
             }
