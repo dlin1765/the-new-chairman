@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,17 +11,20 @@ public class GameControl : MonoBehaviour
     public GameObject playerHandCopy;
     public GameObject enemyHandCopy;
     public GameObject deckHandCopy;
-  
+    public GameObject dialogueManagerCopy;
     public GameObject cardCopy;
     public GameObject tableTop;
     public Sprite[] spriteArray;
-    
+    public GameObject SpeakingManager;
     public GameState state;
     public bool cardPlayed = false;
+    public bool drew;
     PlayerHandController p1;
+    thevoices v1;
     EnemyHandController e1;
     ButtController d1;
     TableHandController t1;
+    DialogManager dm1;
     card c1;
     public int cardTracker;
     public int turnOrder;
@@ -63,12 +66,13 @@ public class GameControl : MonoBehaviour
     }
     public void StartGame()
     {
-        
+        v1 = SpeakingManager.GetComponent<thevoices>();
         p1 = playerHandCopy.GetComponent<PlayerHandController>();
         e1 = enemyHandCopy.GetComponent<EnemyHandController>();
         d1 = deckHandCopy.GetComponent<ButtController>();
         t1 = tableTop.GetComponent<TableHandController>();
         c1 = cardCopy.GetComponent<card>();
+        dm1 = dialogueManagerCopy.GetComponent<DialogManager>();
         state = GameState.ENEMYTURN;
         StartCoroutine(CheckForIllegalMove());
         //p1.printDeck();
@@ -185,31 +189,79 @@ public class GameControl : MonoBehaviour
     */
     public void RuleDecider(int playedNum)
     {
+        DialogueSet ds = new DialogueSet();
+        List<DialogueSet> startWords = new List<DialogueSet>();
+     
+        bool dialogue = false;
         if (playedNum % 13 == 6)
         {
-            Debug.Log("have a nice day");
+            ds.name = "???";
+            ds.dialogue = "Have a nice day";
+            dialogue = true;
+  
         }
-        else if(playedNum % 13 == 0)
+        if (playedNum % 13 == 0)
         {
             Debug.Log("skipped turn");
         }
-        else if(playedNum % 13 == 1)
+        if (playedNum % 13 == 1)
         {
             Debug.Log("draw two cards");
         }
-        else if(playedNum % 13 == 10)
+        if (playedNum % 13 == 10)
         {
-            Debug.Log("change suit");
+       
+            ds.name = "???";
+            if(dialogue)
+            {
+                ds.dialogue = ds.dialogue + ", spades";
+            }
+            else
+            {
+                ds.dialogue = "spades";
+            }
+             // add functionality to pick a new suit using a random number generator 
+
+            dialogue = true;
+
         }
-        else if(playedNum > 38 && playedNum <= 51)
+        if (playedNum > 38 && playedNum <= 51)
         {
-            Debug.Log(playedNum % 13 + 1 + " of spades");
-        }
-        else
-        {
-            Debug.Log("no rule");
+            ds.name = "???";
+            if (dialogue)
+            {
+                ds.dialogue = ds.dialogue + ", " + (playedNum % 13 + 1) + " of spades";
+            }
+            else
+            {
+                ds.dialogue = (playedNum % 13 + 1) + " of spades";
+            }
+           
+            dialogue = true;
+
         }
 
+        if (e1.enemyHand.Count == 1)
+        {
+            ds.name = "???";
+            if (dialogue)
+            {
+                ds.dialogue = ds.dialogue + ", I am the new chairman"; ;
+            }
+            else
+            {
+                ds.dialogue = "I am the new chairman";
+            }
+            dialogue = true;
+            // add functionality to suspend this coroutine and go to a win screen
+            
+        }
+        if (dialogue)
+        {
+            startWords.Add(ds);
+            dm1.StartDialogue(startWords);
+        }
+     
     }
     IEnumerator enemyTurn() // 2 
     {
@@ -261,7 +313,7 @@ public class GameControl : MonoBehaviour
                 }
             }
 
-            RuleDecider(e1.enemyHand[pickOrder]);
+            
 
             // dialogue manager stuff here 
 
@@ -292,6 +344,8 @@ public class GameControl : MonoBehaviour
             RuleDecider(e1.enemyHand[pickOrder]);
             e1.enemyHand.RemoveAt(pickOrder);
            
+           
+
 
         }
         // remember to add functionality to skip turns with aces by upping turn order by 2
@@ -344,17 +398,46 @@ public class GameControl : MonoBehaviour
         yield return null;
     }
 
-    public void timer()
+    /*
+   
+    IF (the player played correctly)
     {
-        
 
+	    IF ( the player needs to say something)
+	
+	    The player will say the phrase, while there is input coming in from the microphone, the code will not move on
+	
+	    If the player said all the phrases that they needed to
+		    ○ Wait out the window and pass the turn to the enemy
+	    Else
+		    ○ Penalize the player and pass the turn to the enemy
+	
+	    Else // the player does not need to say something
+	
+	    The code will wait out the window and pass the turn to the enemy
+    }
+    Else // the player misplayed
+    {
+	    The card will be returned to their hand and they will be penalized
     }
 
+    */
     IEnumerator playerTurn()
     {
+        drew = false;
         yield return new WaitUntil(() => playedCard());
+        if(!drew)
+        {
+            playerRules(t1.tablesHand[t1.tablesHand.Count - 1]);
+        }
+        
+
 
         Debug.Log("player finished");
+
+
+
+
         state = GameState.ENEMYTURN;
         StartCoroutine(CheckForIllegalMove());
         // check if a card has been dropped on the table, if yes, change the state back to the enemy turn
@@ -362,10 +445,72 @@ public class GameControl : MonoBehaviour
         
 
     }
-    
-
-    public bool playedCard()
+    public bool playerRules(int playedNum)
     {
+        /*
+        bool dialogue = false;
+        if (playedNum % 13 == 6) // 7
+        {
+
+        }
+        if (playedNum % 13 == 10) // jack
+        {
+
+           
+
+        }
+        if (playedNum > 38 && playedNum <= 51) // spades
+        {
+           
+
+        }
+        if (p1.playerHand.Count == 1) // last card being played
+        {
+           
+            // add functionality to suspend this coroutine and go to a win screen
+
+        }
+        */
+        /*
+        int tableNum = t1.tablesHand[t1.tablesHand.Count - 1];
+        // tableNum = 3 
+
+        if (tableNum >= 0 && tableNum <= 12)
+        {
+            lowBound = 0;
+            highBound = 12;
+        }
+        else if (tableNum > 12 && tableNum <= 25)
+        {
+            lowBound = 13;
+            highBound = 25;
+        }
+        else if (tableNum > 25 && tableNum <= 38)
+        {
+            lowBound = 25;
+            highBound = 38;
+        }
+        else
+        {
+            lowBound = 38;
+            highBound = 51;
+        }
+
+        for (int i = 0; i < e1.enemyHand.Count; i++)
+        {
+            if ((e1.enemyHand[i] >= lowBound && e1.enemyHand[i] <= highBound) || (t1.tablesHand[t1.tablesHand.Count - 1] % 13 == e1.enemyHand[i] % 13))
+            {
+                pickOrder = i;
+                found = true;
+                break;
+            }
+        }
+        */
+        return false;
+    }
+    
+    public bool playedCard()
+    { 
         /*
         if(state == GameState.PLAYERTURN)
         {
@@ -382,6 +527,10 @@ public class GameControl : MonoBehaviour
         {
             if (cardTracker - 1 == p1.playerHand.Count || cardTracker + 1 == p1.playerHand.Count)
             {
+                if(cardTracker + 1 == p1.playerHand.Count)
+                {
+                    drew = true;
+                }
                 return true;
             }
             else

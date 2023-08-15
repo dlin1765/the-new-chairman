@@ -48,8 +48,8 @@ public class ButtController : MonoBehaviour
         
         player1hand = GameObject.Find("player1hand");
         started = true;
-        startingText.SetActive(true);
-        nameText.SetActive(true);
+        //startingText.SetActive(true);
+        //nameText.SetActive(true);
         enemy1hand = GameObject.Find("enemy1hand");
         enemy2hand = GameObject.Find("enemy2hand");
         enemy3hand = GameObject.Find("enemy3hand");
