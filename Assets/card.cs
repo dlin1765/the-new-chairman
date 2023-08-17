@@ -16,7 +16,7 @@ public class card : MonoBehaviour
     public GameObject enemy3hand;
     public GameObject _card;
     public GameObject _dialogue;
-    private card saveTime;
+    private card _cardCopy;
     public int num;
     private Vector3 temp;   
     public GameObject PlayerHandController;
@@ -28,6 +28,9 @@ public class card : MonoBehaviour
     EnemyHandController enemy1;
     GameControl gc;
     TableHandController th;
+    ButtController bc;
+    PlayerHandController p1;
+    public GameObject deckCopy;
 
     // Start is called before the first frame update
     void Start()
@@ -53,16 +56,39 @@ public class card : MonoBehaviour
         }
         */
         // Debug.Log(deckList.Count);
-        saveTime = _card.GetComponent<card>();
+        _cardCopy = _card.GetComponent<card>();
         enemy1 = enemy1hand.GetComponent<EnemyHandController>();
         gc = GameControllerCopy.GetComponent<GameControl>();
         th = tablehand.GetComponent<TableHandController>();
+        bc = deckCopy.GetComponent<ButtController>();
+        p1 = PlayerHandController.GetComponent<PlayerHandController>();
+
     }
     public void flipCard()
     {
         spriteRenderer.sprite = spriteArray[num];
     }
+    public void PenalizePlayer()
+    {
+        
+        //Debug.Log(bc.deckList[0]);
+        GameObject cardCopy = Instantiate(_card, new Vector3(0, 0, 0), Quaternion.identity);
+        p1.playerHand.Add(bc.deckList[0]);
+        cardCopy.gameObject.SetActive(true);
+        spriteRenderer = cardCopy.GetComponent<SpriteRenderer>();
+      
+        spriteRenderer.sprite = spriteArray[bc.deckList[0]];
+        cardCopy.GetComponent<card>().num = bc.deckList[0];
+        cardCopy.transform.SetParent(p1.transform, false);
 
+        cardCopy.GetComponent<card>().isPlayerCard = true;
+
+        bc.deckList.RemoveAt(0);
+
+
+
+
+    }
     public card SpawnCard(GameObject location, int cardNum, bool whichHand, int whichHands)
     {
        
@@ -133,7 +159,7 @@ public class card : MonoBehaviour
     }
     public void toTable()
     {
-        saveTime.transform.SetParent(tablehand.transform, false);
+        _cardCopy.transform.SetParent(tablehand.transform, false);
     }
     void OnMouseDown()
     {
@@ -161,13 +187,13 @@ public class card : MonoBehaviour
                     {
                        if (gc.state == gc.getState())
                         {
-                            Debug.Log("playing out of order");
+                           // Debug.Log("playing out of order");
                         }
                         isPlayerCard = false;
                         // drop the card into the tablehand grid and remove the number from the players hand
-                        th.belowDeck = th.tablesHand[th.tablesHand.Count - 1];
-                        th.topDeck = num;
-                        saveTime.transform.SetParent(tablehand.transform, false);
+                      //  th.belowDeck = th.tablesHand[th.tablesHand.Count - 1];
+                        //th.topDeck = num;
+                        _cardCopy.transform.SetParent(tablehand.transform, false);
                         copy1.tablesHand.Add(num);
                         int index1 = 0;
                         for (int i = 0; i < copy.playerHand.Count; i++)

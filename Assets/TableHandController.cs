@@ -83,6 +83,10 @@ public class TableHandController : MonoBehaviour
             return false;
         }
     }
+    public void RemoveCard(int index)
+    {
+        tablesHand.RemoveAt(index);
+    }
     public void readdCards()
     {
         GameObject copy = GameObject.Find("ButtonController");

@@ -447,16 +447,32 @@ public class GameControl : MonoBehaviour
         if(!drew)
         {
             suitCheck = playerRules(t1.tablesHand[t1.tablesHand.Count - 1]); //this detects the rules that i need
-            if (!suitCheck) // if the player does not play the correct suit
+            while (!suitCheck) // if the player does not play the correct suit
             {
-                int temp = tableTop.transform.GetChild(t1.tablesHand.Count - 1).GetComponent<card>().num;
-                p1.playerHand.Add(temp);
-                tableTop.transform.GetChild(t1.tablesHand.Count - 1).gameObject.transform.SetParent(playerHandCopy.transform, false);
-                Debug.Log(temp);
-                //tableTransform.GetChild(i).gameObject);
-                //enemyTransform.GetChild(pickOrder).gameObject.transform.SetParent(tableTransform, false);
+                yield return new WaitForSeconds(1f);
+                Debug.Log("WRONG SUIT BITCH");
+                /*
+                c1.PenalizePlayer();
 
+                int temp = tableTop.transform.GetChild(t1.tablesHand.Count - 1).GetComponent<card>().num; // looks at the tables topdeck and gets the cards num
+              
+                p1.AddCard(temp);
+                tableTop.transform.GetChild(t1.tablesHand.Count - 1).GetComponent<card>().isPlayerCard = true;
+               
+                tableTop.transform.GetChild(t1.tablesHand.Count - 1).gameObject.transform.SetParent(playerHandCopy.transform, false);
+                
+                t1.RemoveCard(t1.tablesHand.Count - 1);
+                Debug.Log("penalize player done, now waiting for playedcard");
+                
+                
+
+
+                
                 yield return new WaitUntil(() => playedCard());
+                Debug.Log("done with player");
+                suitCheck = playerRules(t1.tablesHand[t1.tablesHand.Count - 1]);
+                */
+                suitCheck = playerRules(t1.tablesHand[t1.tablesHand.Count - 1]);
             }
 
             
@@ -572,13 +588,13 @@ public class GameControl : MonoBehaviour
 
         if ((playedNum >= lowBound && playedNum <= highBound) || (tableNum % 13 == playedNum % 13))
         {
-            Debug.Log("CORRECT SUIT");
+            //Debug.Log("CORRECT SUIT");
             return true;
         }
         else
         {
             // this is where the table will spit back the players card because they played the incorrect suit
-            Debug.Log("INCORRECT SUIT");
+            //Debug.Log("INCORRECT SUIT");
             
             return false;
 

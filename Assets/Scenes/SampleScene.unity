@@ -961,7 +961,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerHandCopy: {fileID: 4405510501462086808}
   enemyHandCopy: {fileID: 2093681622}
-  deckHandCopy: {fileID: 731929155}
+  deckHandCopy: {fileID: 2128865611}
   dialogueManagerCopy: {fileID: 355645718}
   cardCopy: {fileID: 1794486849}
   tableTop: {fileID: 1655446791}
@@ -1827,6 +1827,7 @@ MonoBehaviour:
   - {fileID: -686530315640835919, guid: 343925506c01eb140846a4d86d5bcf87, type: 3}
   - {fileID: -1287802295239891605, guid: 343925506c01eb140846a4d86d5bcf87, type: 3}
   GameControllerCopy: {fileID: 969040269}
+  deckCopy: {fileID: 2128865611}
 --- !u!1 &1821933850
 GameObject:
   m_ObjectHideFlags: 0

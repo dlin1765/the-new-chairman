@@ -26,7 +26,9 @@ public class ButtController : MonoBehaviour
     public GameObject startingText;
     public GameObject nameText;
     public GameObject _dialogue;
-    
+
+    PlayerHandController p1;
+
     public bool started = false;
     private string deckPrint;
     public int turn;
@@ -48,6 +50,7 @@ public class ButtController : MonoBehaviour
     {
         
         player1hand = GameObject.Find("player1hand");
+        
         started = true;
         //startingText.SetActive(true);
         //nameText.SetActive(true);
@@ -89,12 +92,12 @@ public class ButtController : MonoBehaviour
     }
     void Start()
     {
-        deckList = new List<int>();
+        deckList = new List<int>(); 
         for (int i = 0; i < 52; i++)
         {
             deckList.Add(i);
         }
-        
+        p1 = player1hand.GetComponent<PlayerHandController>();
         for (int i = 0; i < 52; i++)
         {
             int temp = deckList[i];
@@ -106,5 +109,11 @@ public class ButtController : MonoBehaviour
         startingText.SetActive(false);
         nameText.SetActive(false);
         
-    }   
+    }
+    public void PenalizePlayer()
+    {
+       
+       
+    }
+
 }

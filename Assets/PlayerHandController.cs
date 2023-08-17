@@ -18,7 +18,7 @@ public class PlayerHandController : MonoBehaviour
     void Start()
     {
         _card = GameObject.Find("Card");
-        _deck = GameObject.Find("Deck");
+        _deck = GameObject.Find("ButtonController");
         player1hand = GameObject.Find("player1hand");
         enemy1hand = GameObject.Find("enemy1hand");
         enemy2hand = GameObject.Find("enemy2hand");
@@ -34,12 +34,22 @@ public class PlayerHandController : MonoBehaviour
     {
         
     }
+    public void AddCard(int num)
+    {
+        playerHand.Add(num);
+    }
     public void printDeck()
     {
         for(int i = 0; i < playerHand.Count; i++)
         {
             Debug.Log(playerHand[i] + " ");
         }
+    }
+
+    public void PenalizePlayer()
+    {
+        ButtController d1 = _deck.GetComponent<ButtController>();
+        d1.CreateCard();
     }
 
     public bool isClicked()
