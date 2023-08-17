@@ -10,7 +10,7 @@ public class thevoices : MonoBehaviour
     private KeywordRecognizer recognizer;
     private Dictionary<string, Action> actions = new Dictionary<string, Action>();
     public GameObject GameControlCopy;
-
+    public SpriteRenderer renderer;
     GameControl gc;
     public event Action<float> BelowLowThreshold;
     public event Action<float> AboveHighThreshold;
@@ -43,7 +43,7 @@ public class thevoices : MonoBehaviour
         actions.Add("jack of spades", Seven);
 
         gc = GameControlCopy.GetComponent<GameControl>();
-
+        renderer = this.GetComponent<SpriteRenderer>();
         recognizer = new KeywordRecognizer(actions.Keys.ToArray());
         recognizer.OnPhraseRecognized += RecognizedSpeech;
         recognizer.Start();
@@ -73,14 +73,18 @@ public class thevoices : MonoBehaviour
             Debug.Log("A:LKSJDLAS:JD:LKASJDLKJASDLKJASLKDJklj");
         }
         */
-        if(_currentLoudness <= 0.000099999) // tweak this maybe to see if this doesn't work with other mics
+        if(_currentLoudness <= 0.0099) // tweak this maybe to see if this doesn't work with other mics //0.000099 too sensitive
         {
             isTalking = false;
+            renderer.color = new Color(0f, 5f, 0f, 1f);
         }
         else
         {
             isTalking = true;
+            renderer.color = new Color(5f, 0f, 0f, 1f);
         }
+        //if(gc)
+        
     }
 
     public static float GetLoudnessFromAudioClip(int clipPosition, AudioClip clip, int sampleWindow)

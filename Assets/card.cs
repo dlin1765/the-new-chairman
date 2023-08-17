@@ -27,7 +27,7 @@ public class card : MonoBehaviour
     public GameObject GameControllerCopy;
     EnemyHandController enemy1;
     GameControl gc;
-
+    TableHandController th;
 
     // Start is called before the first frame update
     void Start()
@@ -56,6 +56,7 @@ public class card : MonoBehaviour
         saveTime = _card.GetComponent<card>();
         enemy1 = enemy1hand.GetComponent<EnemyHandController>();
         gc = GameControllerCopy.GetComponent<GameControl>();
+        th = tablehand.GetComponent<TableHandController>();
     }
     public void flipCard()
     {
@@ -71,6 +72,7 @@ public class card : MonoBehaviour
         enemy2hand = GameObject.Find("enemy2hand");
         enemy3hand = GameObject.Find("enemy3hand");
         tablehand = GameObject.Find("tablehand");
+       
         tablePosition = tablehand.transform.position;
         
         GameObject cardCopy = Instantiate(_card, new Vector3(0, 0, 0), Quaternion.identity);
@@ -147,7 +149,7 @@ public class card : MonoBehaviour
             copy.played = false;
             Vector3[] arr = new Vector3[4];
             tablehand.GetComponent<RectTransform>().GetWorldCorners(arr);
-
+            
             if (isPlayerCard)
             {
                 if (clicked == true)
@@ -163,7 +165,8 @@ public class card : MonoBehaviour
                         }
                         isPlayerCard = false;
                         // drop the card into the tablehand grid and remove the number from the players hand
-                        
+                        th.belowDeck = th.tablesHand[th.tablesHand.Count - 1];
+                        th.topDeck = num;
                         saveTime.transform.SetParent(tablehand.transform, false);
                         copy1.tablesHand.Add(num);
                         int index1 = 0;

@@ -117,7 +117,7 @@ public class DialogManager : MonoBehaviour
     
     public void skipDialogue()
     {
-        Debug.Log("good morning");
+        //Debug.Log("good morning");
         if (dialogueList.Count > 0) // if the dialogue list has stuff in it it sets the text the second thing bc from start dialogue it removes the 
         {
             

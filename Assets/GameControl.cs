@@ -6,7 +6,7 @@ using UnityEngine;
 public class GameControl : MonoBehaviour
 {
 
-    public enum GameState { PAUSE, PLAYERTURN, ENEMYTURN, ENEMY2TURN, ENEMY3TURN, START }
+    public enum GameState { PAUSE, PLAYERTURN, ENEMYTURN, ENEMY2TURN, ENEMY3TURN, START, PLAYERPENALTY }
 
     public GameObject playerHandCopy;
     public GameObject enemyHandCopy;
@@ -17,6 +17,7 @@ public class GameControl : MonoBehaviour
     public Sprite[] spriteArray;
     public GameObject SpeakingManager;
     public GameState state;
+    public bool spokeCorrectly = true;
     public bool cardPlayed = false;
     public bool drew;
     PlayerHandController p1;
@@ -398,6 +399,24 @@ public class GameControl : MonoBehaviour
         yield return null;
     }
 
+    IEnumerator CheckForSpeaking()
+    {
+     
+            double timer = 0.0;
+            while (timer <= 50)
+            {
+                timer = timer + 0.1;
+                yield return null;
+                if (v1.isTalking)
+                {
+                    timer = 0.0;
+                }
+
+                // this is where i will check for all the phrases that need to be said and if theyre not all right then the state will switch to player penalty
+            }
+
+            
+    }
     /*
    
     IF (the player played correctly)
@@ -405,12 +424,9 @@ public class GameControl : MonoBehaviour
 
 	    IF ( the player needs to say something)
 	
-	    The player will say the phrase, while there is input coming in from the microphone, the code will not move on
+	        The player will say the phrase, while there is input coming in from the microphone, the code will not move on
 	
-	    If the player said all the phrases that they needed to
-		    ○ Wait out the window and pass the turn to the enemy
-	    Else
-		    ○ Penalize the player and pass the turn to the enemy
+	       
 	
 	    Else // the player does not need to say something
 	
@@ -424,16 +440,57 @@ public class GameControl : MonoBehaviour
     */
     IEnumerator playerTurn()
     {
+        spokeCorrectly = true;
         drew = false;
+        bool suitCheck = false;
         yield return new WaitUntil(() => playedCard());
         if(!drew)
         {
-            playerRules(t1.tablesHand[t1.tablesHand.Count - 1]);
+            suitCheck = playerRules(t1.tablesHand[t1.tablesHand.Count - 1]); //this detects the rules that i need
+            if (!suitCheck) // if the player does not play the correct suit
+            {
+                int temp = tableTop.transform.GetChild(t1.tablesHand.Count - 1).GetComponent<card>().num;
+                p1.playerHand.Add(temp);
+                tableTop.transform.GetChild(t1.tablesHand.Count - 1).gameObject.transform.SetParent(playerHandCopy.transform, false);
+                Debug.Log(temp);
+                //tableTransform.GetChild(i).gameObject);
+                //enemyTransform.GetChild(pickOrder).gameObject.transform.SetParent(tableTransform, false);
+
+                yield return new WaitUntil(() => playedCard());
+            }
+
+            
         }
+        yield return CheckForSpeaking(); // checks if the player said all the things it needs to do
+
         
 
+        /*
+        if(spokeCorrectly)
+        {
+               state = GameState.ENEMYTURN;
+               StartCoroutine(CheckForIllegalMove());
+        }
+        else
+        {
+                StartCoroutine(PenalizePlayer());
+                // dialogue must be written here 
+                
 
-        Debug.Log("player finished");
+
+
+                state = GameState.ENEMYTURN;
+                StartCoroutine(CheckForIllegalMove());
+
+        }
+         if the game state is still playerturn and not playerpenalty
+		        ○ Wait out the window and pass the turn to the enemy
+	     Else (game state is player penalty)
+		        ○ Penalize the player and pass the turn to the enemy
+
+        */
+
+        //Debug.Log("player finished");
 
 
 
@@ -442,11 +499,95 @@ public class GameControl : MonoBehaviour
         StartCoroutine(CheckForIllegalMove());
         // check if a card has been dropped on the table, if yes, change the state back to the enemy turn
         // add functionality to check if a player dropped a card during enemy turn, debug.log("playing out of order")
-        
 
+
+    }
+    IEnumerator CheckSuits(int playedNum)
+    {
+        int tableNum = t1.BelowDeck();
+
+        int lowBound = 0;
+        int highBound = 0;
+        if (tableNum >= 0 && tableNum <= 12)
+        {
+            lowBound = 0;
+            highBound = 12;
+        }
+        else if (tableNum > 12 && tableNum <= 25)
+        {
+            lowBound = 13;
+            highBound = 25;
+        }
+        else if (tableNum > 25 && tableNum <= 38)
+        {
+            lowBound = 25;
+            highBound = 38;
+        }
+        else
+        {
+            lowBound = 38;
+            highBound = 51;
+        }
+
+        if ((playedNum >= lowBound && playedNum <= highBound) || (tableNum % 13 == playedNum % 13))
+        {
+            Debug.Log("CORRECT SUIT");
+       
+        }
+        else
+        {
+            // this is where the table will spit back the players card because they played the incorrect suit
+            Debug.Log("INCORRECT SUIT");
+
+
+        }
+        yield return null;
     }
     public bool playerRules(int playedNum)
     {
+        int tableNum = t1.BelowDeck();
+        
+        int lowBound = 0;
+        int highBound = 0;
+        if (tableNum >= 0 && tableNum <= 12)
+        {
+            lowBound = 0;
+            highBound = 12;
+        }
+        else if (tableNum > 12 && tableNum <= 25)
+        {
+            lowBound = 13;
+            highBound = 25;
+        }
+        else if (tableNum > 25 && tableNum <= 38)
+        {
+            lowBound = 25;
+            highBound = 38;
+        }
+        else
+        {
+            lowBound = 38;
+            highBound = 51;
+        }
+
+        if ((playedNum >= lowBound && playedNum <= highBound) || (tableNum % 13 == playedNum % 13))
+        {
+            Debug.Log("CORRECT SUIT");
+            return true;
+        }
+        else
+        {
+            // this is where the table will spit back the players card because they played the incorrect suit
+            Debug.Log("INCORRECT SUIT");
+            
+            return false;
+
+        }
+        
+
+
+
+
         /*
         bool dialogue = false;
         if (playedNum % 13 == 6) // 7
@@ -472,44 +613,12 @@ public class GameControl : MonoBehaviour
         }
         */
         /*
-        int tableNum = t1.tablesHand[t1.tablesHand.Count - 1];
-        // tableNum = 3 
-
-        if (tableNum >= 0 && tableNum <= 12)
-        {
-            lowBound = 0;
-            highBound = 12;
-        }
-        else if (tableNum > 12 && tableNum <= 25)
-        {
-            lowBound = 13;
-            highBound = 25;
-        }
-        else if (tableNum > 25 && tableNum <= 38)
-        {
-            lowBound = 25;
-            highBound = 38;
-        }
-        else
-        {
-            lowBound = 38;
-            highBound = 51;
-        }
-
-        for (int i = 0; i < e1.enemyHand.Count; i++)
-        {
-            if ((e1.enemyHand[i] >= lowBound && e1.enemyHand[i] <= highBound) || (t1.tablesHand[t1.tablesHand.Count - 1] % 13 == e1.enemyHand[i] % 13))
-            {
-                pickOrder = i;
-                found = true;
-                break;
-            }
-        }
+       
         */
         return false;
     }
-    
-    public bool playedCard()
+
+public bool playedCard()
     { 
         /*
         if(state == GameState.PLAYERTURN)

@@ -12,6 +12,8 @@ public class TableHandController : MonoBehaviour
     public GameObject ButtController;
     public GameObject _deck;
     public List<int> tablesHand;
+    public int topDeck;
+    public int belowDeck;
     private string deckPrint;
     // Start is called before the first frame update
     void Start()
@@ -47,6 +49,29 @@ public class TableHandController : MonoBehaviour
 
         }
     }
+
+    public int TopDeck()
+    {
+        if(tablesHand.Count > 0)
+        {
+            return tablesHand[tablesHand.Count - 1];
+        }
+        else
+        {
+            return -1;
+        }
+    }
+    public int BelowDeck()
+    {
+       if(tablesHand.Count > 1)
+        {
+            return tablesHand[tablesHand.Count - 2];
+        }
+       else
+        {
+            return -1;
+        }
+    }
     public bool isFull()
     {
         if (tablesHand.Count >= 6)
@@ -65,7 +90,7 @@ public class TableHandController : MonoBehaviour
         ButtController copy1 = copy.GetComponent<ButtController>();
         var tableTransform = this.transform;
         int temp = tablesHand.Count;
-        for (int i = 0; i < temp - 1; i++)
+        for (int i = 0; i < temp - 2; i++)
         {
             copy1.deckList.Add(tablesHand[i]);
             
@@ -73,7 +98,7 @@ public class TableHandController : MonoBehaviour
             //_card 
             
         }
-        tablesHand.RemoveRange(0, temp - 1);
+        tablesHand.RemoveRange(0, temp - 2);
         /*
         for (int i = 0; i < tablesHand.Count; i++)
         {

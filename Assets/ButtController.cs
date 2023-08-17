@@ -26,6 +26,7 @@ public class ButtController : MonoBehaviour
     public GameObject startingText;
     public GameObject nameText;
     public GameObject _dialogue;
+    
     public bool started = false;
     private string deckPrint;
     public int turn;
