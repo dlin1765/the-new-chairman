@@ -19,6 +19,7 @@ public class GameControl : MonoBehaviour
     public GameState state;
     public bool spokeCorrectly = true;
     public bool cardPlayed = false;
+    public bool suitCorrect = false;
     public bool drew;
     PlayerHandController p1;
     thevoices v1;
@@ -438,18 +439,174 @@ public class GameControl : MonoBehaviour
     }
 
     */
+
+
+
+    /*
     IEnumerator playerTurn()
     {
         spokeCorrectly = true;
         drew = false;
         bool suitCheck = false;
         yield return new WaitUntil(() => playedCard());
-        if(!drew)
+        if (!drew)
         {
+            
+              yield return new WaitUntil(() => playedCard());
+
+
+
             suitCheck = playerRules(t1.tablesHand[t1.tablesHand.Count - 1]); //this detects the rules that i need
             while (!suitCheck) // if the player does not play the correct suit
             {
                 yield return new WaitForSeconds(1f);
+                Debug.Log("WRONG SUIT BITCH");
+                /*
+                c1.PenalizePlayer();
+
+                int temp = tableTop.transform.GetChild(t1.tablesHand.Count - 1).GetComponent<card>().num; // looks at the tables topdeck and gets the cards num
+              
+                p1.AddCard(temp);
+                tableTop.transform.GetChild(t1.tablesHand.Count - 1).GetComponent<card>().isPlayerCard = true;
+               
+                tableTop.transform.GetChild(t1.tablesHand.Count - 1).gameObject.transform.SetParent(playerHandCopy.transform, false);
+                
+                t1.RemoveCard(t1.tablesHand.Count - 1);
+                Debug.Log("penalize player done, now waiting for playedcard");
+                
+                
+
+
+                
+                yield return new WaitUntil(() => playedCard());
+                Debug.Log("done with player");
+                suitCheck = playerRules(t1.tablesHand[t1.tablesHand.Count - 1]);
+                
+                suitCheck = playerRules(t1.tablesHand[t1.tablesHand.Count - 1]);
+            }
+
+
+        }
+        yield return CheckForSpeaking(); // checks if the player said all the things it needs to do
+
+
+
+        /*
+        if(spokeCorrectly)
+        {
+               state = GameState.ENEMYTURN;
+               StartCoroutine(CheckForIllegalMove());
+        }
+        else
+        {
+                StartCoroutine(PenalizePlayer());
+                // dialogue must be written here 
+                
+
+
+
+                state = GameState.ENEMYTURN;
+                StartCoroutine(CheckForIllegalMove());
+
+        }
+         if the game state is still playerturn and not playerpenalty
+		        ○ Wait out the window and pass the turn to the enemy
+	     Else (game state is player penalty)
+		        ○ Penalize the player and pass the turn to the enemy
+
+        
+
+        //Debug.Log("player finished");
+
+
+
+
+        state = GameState.ENEMYTURN;
+        StartCoroutine(CheckForIllegalMove());
+        // check if a card has been dropped on the table, if yes, change the state back to the enemy turn
+        // add functionality to check if a player dropped a card during enemy turn, debug.log("playing out of order")
+
+
+    }
+    */
+    public bool CheckForSuit()
+    {
+        if(suitCorrect)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    IEnumerator PlayerTimer()
+    {
+       
+        while (!suitCorrect)
+        {
+            // give back the cards and penalize up date the numcards 
+            c1.PenalizePlayer();
+            int temp = tableTop.transform.GetChild(t1.tablesHand.Count - 1).GetComponent<card>().num; // looks at the tables topdeck and gets the cards num
+
+            p1.AddCard(temp);
+            tableTop.transform.GetChild(t1.tablesHand.Count - 1).GetComponent<card>().isPlayerCard = true;
+
+            tableTop.transform.GetChild(t1.tablesHand.Count - 1).gameObject.transform.SetParent(playerHandCopy.transform, false);
+                
+            t1.RemoveCard(t1.tablesHand.Count - 1);
+            p1.numCards = p1.playerHand.Count;
+            cardTracker = p1.numCards;
+            Debug.Log("Incorrect suit");
+            yield return new WaitUntil(() => playedCard());
+           
+           
+            bool suitCheck = playerRules(t1.tablesHand[t1.tablesHand.Count - 1]);
+           
+            if(suitCheck)
+            {
+                suitCorrect = true;
+            }
+        }
+        
+    }
+
+    IEnumerator playerTurn()
+    {
+        spokeCorrectly = true;
+        drew = false;
+        bool suitCheck = false;
+        Debug.Log("waiting");
+        yield return new WaitUntil(() => playedCard());
+        if(!drew)
+        {
+            /*
+              yield return new WaitUntil(() => playedCard());
+
+
+             */
+
+            
+            suitCheck = playerRules(t1.tablesHand[t1.tablesHand.Count - 1]); //this detects the rules that i need
+            if(!suitCheck)
+            {
+                suitCorrect = false;
+            }
+            else
+            {
+                suitCorrect = true;
+            }
+            StartCoroutine(PlayerTimer());
+            yield return new WaitUntil(() => CheckForSuit());
+
+
+            while (!suitCheck) // if the player does not play the correct suit
+            {
+
+                // start the coroutine that will turn a bool to true which will satisfy
+
+                
                 Debug.Log("WRONG SUIT BITCH");
                 /*
                 c1.PenalizePlayer();
