@@ -57,7 +57,7 @@ public class PlayerHandController : MonoBehaviour
         for(int i = 0; i < playerHand.Count; i++)
         {
             if(this.transform.GetChild(i).GetComponent<card>().clicked)
-            {
+            {                                                                        
                 return true;
             }
         }

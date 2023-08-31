@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 
 public class GameControl : MonoBehaviour
@@ -15,12 +16,18 @@ public class GameControl : MonoBehaviour
     public GameObject cardCopy;
     public GameObject tableTop;
     public Sprite[] spriteArray;
+    public Text CardTrackText;
     public GameObject SpeakingManager;
     public GameState state;
     public bool spokeCorrectly = true;
     public bool cardPlayed = false;
     public bool suitCorrect = false;
     public bool drew;
+
+    public Text testText;
+    public Text turnText;
+
+
     PlayerHandController p1;
     thevoices v1;
     EnemyHandController e1;
@@ -28,7 +35,7 @@ public class GameControl : MonoBehaviour
     TableHandController t1;
     DialogManager dm1;
     card c1;
-    public int cardTracker;
+    public int cardTracker= 0;
     public int turnOrder;
 
     public float swingCD = 1000005.05f;
@@ -39,11 +46,29 @@ public class GameControl : MonoBehaviour
     {
         state = GameState.START;
         turnOrder = 0;
+        testText.gameObject.SetActive(true);
     }
 
     void Update()
     {
-      
+        if(state != GameState.START)
+        {
+            testText.text = cardTracker + "/ " + p1.playerHand.Count;
+            if(playedCard())
+            {
+                turnText.text = "true";
+            }
+            else
+            {
+                turnText.text = "false";
+            }
+            
+        }
+        
+
+
+
+
     }
 
     // 0 - 12 clubs 
@@ -345,10 +370,6 @@ public class GameControl : MonoBehaviour
             enemyTransform.GetChild(pickOrder).gameObject.transform.SetParent(tableTransform, false);
             RuleDecider(e1.enemyHand[pickOrder]);
             e1.enemyHand.RemoveAt(pickOrder);
-           
-           
-
-
         }
         // remember to add functionality to skip turns with aces by upping turn order by 2
         turnOrder++;
@@ -381,19 +402,69 @@ public class GameControl : MonoBehaviour
         // if statement to change the state to the correct one 
 
     }
+
+    public void OutOfTurn()
+    {
+        StopAllCoroutines();
+        StartCoroutine(Restart());
+    }
+
+    IEnumerator Restart()
+    {
+        yield return new WaitForSeconds(1f);
+        StartCoroutine(CheckForSpeaking());
+    }
+
     IEnumerator CheckForIllegalMove() //1 
     {
+        
+        drew = false;
+        bool played;
+        DialogueSet ds = new DialogueSet();
+        List<DialogueSet> startWords = new List<DialogueSet>();
+        p1.numCards = p1.playerHand.Count;
+        cardTracker = p1.numCards;
         if (state == GameState.ENEMYTURN)
         {
             double timer = 0.0;
-            while (timer <= 50)
+            while (timer <= 30)
             {
+                testText.text = cardTracker + "/ " + p1.playerHand.Count + "!";
                 timer = timer + 0.1;
                 yield return null;
                 if (p1.isClicked())
                 {
                     timer = 0.0;
+                    // startcoroutine check for played card
                 }
+                played = playedCard();
+               
+                while (played)
+                {
+                    c1.PenalizePlayer();
+                    
+                    if (drew)
+                    {
+                        int temp = tableTop.transform.GetChild(t1.tablesHand.Count - 1).GetComponent<card>().num; // looks at the tables topdeck and gets the cards num
+
+                        p1.AddCard(temp);
+                        tableTop.transform.GetChild(t1.tablesHand.Count - 1).GetComponent<card>().isPlayerCard = true;
+
+                        tableTop.transform.GetChild(t1.tablesHand.Count - 1).gameObject.transform.SetParent(playerHandCopy.transform, false);
+
+                        t1.RemoveCard(t1.tablesHand.Count - 1);
+                    }
+                    ds.name = "???";
+                    ds.dialogue = "playing out of order";
+                    startWords.Add(ds);
+                    dm1.StartDialogue(startWords);
+                    timer = 0.0;
+                    p1.numCards = p1.playerHand.Count;
+                    cardTracker = p1.numCards;
+                    played = false;
+                }
+
+
             }
             StartCoroutine(enemyTurn());
         }
@@ -412,11 +483,13 @@ public class GameControl : MonoBehaviour
                 {
                     timer = 0.0;
                 }
+                // if the player plays any more cards during this time, return it to their hand and penalize them 
 
-                // this is where i will check for all the phrases that need to be said and if theyre not all right then the state will switch to player penalty
+            // this is where i will check for all the phrases that need to be said and if theyre not all right then the state will switch to player penalty
             }
 
-            
+            state = GameState.ENEMYTURN;
+            StartCoroutine(CheckForIllegalMove());
     }
     /*
    
@@ -543,7 +616,8 @@ public class GameControl : MonoBehaviour
 
     IEnumerator PlayerTimer()
     {
-       
+        DialogueSet ds = new DialogueSet();
+        List<DialogueSet> startWords = new List<DialogueSet>();
         while (!suitCorrect)
         {
             // give back the cards and penalize up date the numcards 
@@ -558,7 +632,12 @@ public class GameControl : MonoBehaviour
             t1.RemoveCard(t1.tablesHand.Count - 1);
             p1.numCards = p1.playerHand.Count;
             cardTracker = p1.numCards;
-            Debug.Log("Incorrect suit");
+            ds.name = "???";
+            ds.dialogue = "Playing the incorrect suit";
+            startWords.Add(ds);
+            dm1.StartDialogue(startWords);
+
+
             yield return new WaitUntil(() => playedCard());
            
            
@@ -577,19 +656,15 @@ public class GameControl : MonoBehaviour
         spokeCorrectly = true;
         drew = false;
         bool suitCheck = false;
-        Debug.Log("waiting");
+      
+
+        // probably need to add another coroutine to check for speaking here because that would be talking 
+
         yield return new WaitUntil(() => playedCard());
-        if(!drew)
+        if (!drew)
         {
-            /*
-              yield return new WaitUntil(() => playedCard());
-
-
-             */
-
-            
             suitCheck = playerRules(t1.tablesHand[t1.tablesHand.Count - 1]); //this detects the rules that i need
-            if(!suitCheck)
+            if (!suitCheck)
             {
                 suitCorrect = false;
             }
@@ -599,41 +674,14 @@ public class GameControl : MonoBehaviour
             }
             StartCoroutine(PlayerTimer());
             yield return new WaitUntil(() => CheckForSuit());
-
-
-            while (!suitCheck) // if the player does not play the correct suit
-            {
-
-                // start the coroutine that will turn a bool to true which will satisfy
-
-                
-                Debug.Log("WRONG SUIT BITCH");
-                /*
-                c1.PenalizePlayer();
-
-                int temp = tableTop.transform.GetChild(t1.tablesHand.Count - 1).GetComponent<card>().num; // looks at the tables topdeck and gets the cards num
-              
-                p1.AddCard(temp);
-                tableTop.transform.GetChild(t1.tablesHand.Count - 1).GetComponent<card>().isPlayerCard = true;
-               
-                tableTop.transform.GetChild(t1.tablesHand.Count - 1).gameObject.transform.SetParent(playerHandCopy.transform, false);
-                
-                t1.RemoveCard(t1.tablesHand.Count - 1);
-                Debug.Log("penalize player done, now waiting for playedcard");
-                
-                
-
-
-                
-                yield return new WaitUntil(() => playedCard());
-                Debug.Log("done with player");
-                suitCheck = playerRules(t1.tablesHand[t1.tablesHand.Count - 1]);
-                */
-                suitCheck = playerRules(t1.tablesHand[t1.tablesHand.Count - 1]);
-            }
-
-            
+            state = GameState.ENEMYTURN;
         }
+        else
+        {
+            state = GameState.ENEMYTURN;
+        }
+
+        // if the player needs to say something otherwise itll pass
         yield return CheckForSpeaking(); // checks if the player said all the things it needs to do
 
         
@@ -666,10 +714,14 @@ public class GameControl : MonoBehaviour
         //Debug.Log("player finished");
 
 
+        // this is where it was danny HASDJHLAKDJSKLAJSDKL
 
-
+        /*
+  
         state = GameState.ENEMYTURN;
         StartCoroutine(CheckForIllegalMove());
+        */
+
         // check if a card has been dropped on the table, if yes, change the state back to the enemy turn
         // add functionality to check if a player dropped a card during enemy turn, debug.log("playing out of order")
 
@@ -813,6 +865,7 @@ public bool playedCard()
                 {
                     drew = true;
                 }
+                
                 return true;
             }
             else

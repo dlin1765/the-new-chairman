@@ -32,6 +32,8 @@ public class card : MonoBehaviour
     PlayerHandController p1;
     public GameObject deckCopy;
 
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -70,7 +72,7 @@ public class card : MonoBehaviour
     }
     public void PenalizePlayer()
     {
-        
+        clicked = false;
         //Debug.Log(bc.deckList[0]);
         GameObject cardCopy = Instantiate(_card, new Vector3(0, 0, 0), Quaternion.identity);
         p1.playerHand.Add(bc.deckList[0]);
@@ -81,11 +83,11 @@ public class card : MonoBehaviour
         cardCopy.GetComponent<card>().num = bc.deckList[0];
         cardCopy.transform.SetParent(p1.transform, false);
 
-        cardCopy.GetComponent<card>().isPlayerCard = true;
-
+        cardCopy.GetComponent<card>().isPlayerCard = true; 
+        
         bc.deckList.RemoveAt(0);
 
-
+        clicked = false;
 
 
     }
@@ -189,34 +191,47 @@ public class card : MonoBehaviour
                         {
                            // Debug.Log("playing out of order");
                         }
-                        isPlayerCard = false;
-                        // drop the card into the tablehand grid and remove the number from the players hand
-                      //  th.belowDeck = th.tablesHand[th.tablesHand.Count - 1];
-                        //th.topDeck = num;
-                        _cardCopy.transform.SetParent(tablehand.transform, false);
-                        copy1.tablesHand.Add(num);
-                        int index1 = 0;
-                        for (int i = 0; i < copy.playerHand.Count; i++)
+                        if (gc.state != GameControl.GameState.ENEMYTURN)
                         {
-                            if (copy.playerHand[i] == num)
+                            isPlayerCard = false;
+                            // drop the card into the tablehand grid and remove the number from the players hand
+                            //  th.belowDeck = th.tablesHand[th.tablesHand.Count - 1];
+                            //th.topDeck = num;
+                            _cardCopy.transform.SetParent(tablehand.transform, false);
+                            copy1.tablesHand.Add(num);
+                            int index1 = 0;
+                            for (int i = 0; i < copy.playerHand.Count; i++)
                             {
-                                index1 = i;
-                                break;
+                                if (copy.playerHand[i] == num)
+                                {
+                                    index1 = i;
+                                    break;
+                                }
+                            }
+
+                            bool l = gc.playedCard();
+
+                            copy.played = true;
+                            copy.playerHand.RemoveAt(index1);
+                            if (copy1.isFull())
+                            {
+                                copy1.readdCards();
                             }
                         }
-                 
-                        bool l = gc.playedCard();
-                        
-                        copy.played = true;
-                        copy.playerHand.RemoveAt(index1);
-                        if (copy1.isFull())
+                        else
                         {
-                            copy1.readdCards();
+                            Debug.Log("wrong turn");
+                            gc.OutOfTurn();
+                            copy.played = false;
+                            transform.position = temp;
+                            PenalizePlayer();
+                            
                         }
+                        
 
 
                         // here is where i will detect if the player dropped a card onto the table while its not their turn
-
+                        
                     }
                     else
                     {

@@ -99,7 +99,7 @@ public class DialogManager : MonoBehaviour
         
         double timer = 0.0;
         
-        while (timer <= 50)
+        while (timer <= 40)
         {
             timer = timer + 0.1;
             if(Input.GetKeyDown("space") && isDialogue)
