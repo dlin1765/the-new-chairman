@@ -56,11 +56,11 @@ public class GameControl : MonoBehaviour
             testText.text = cardTracker + "/ " + p1.playerHand.Count;
             if(playedCard())
             {
-                turnText.text = "true" + " Turn order: " + turnOrder;
+                turnText.text = "true/" + turnOrder;
             }
             else
             {
-                turnText.text = "false" + " Turn order: " + turnOrder;
+                turnText.text = "false/" + turnOrder;
             }
             
         }
@@ -373,13 +373,13 @@ public class GameControl : MonoBehaviour
             e1.enemyHand.RemoveAt(pickOrder);
         }
         // remember to add functionality to skip turns with aces by upping turn order by 2
-        turnOrder++;
+        turnOrder = (turnOrder + 1) % 4;
         // have to change it to player turn
-        if (turnOrder == 1)
+        if (turnOrder == 0)
         {
 
         }
-        else if (turnOrder == 2)
+        else if (turnOrder == 1)
         {
 
         }
@@ -676,10 +676,12 @@ public class GameControl : MonoBehaviour
             StartCoroutine(PlayerTimer());
             yield return new WaitUntil(() => CheckForSuit());
             state = GameState.ENEMYTURN;
+            turnOrder = (turnOrder + 1) % 4;
         }
         else
         {
             state = GameState.ENEMYTURN;
+            turnOrder = (turnOrder + 1) % 4;
         }
 
         // if the player needs to say something otherwise itll pass
@@ -845,19 +847,8 @@ public class GameControl : MonoBehaviour
     }
 
 public bool playedCard()
-    { 
-        /*
-        if(state == GameState.PLAYERTURN)
-        {
-            Debug.Log("good play");
-            return true;
-        }
-        else
-        {
-            Debug.Log("bad play");
-            return false;
-        }
-        */
+{ 
+      
         if (state == GameState.PLAYERTURN)
         {
             if (cardTracker - 1 == p1.playerHand.Count || cardTracker + 1 == p1.playerHand.Count)
