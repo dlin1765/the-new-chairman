@@ -56,11 +56,11 @@ public class GameControl : MonoBehaviour
             testText.text = cardTracker + "/ " + p1.playerHand.Count;
             if(playedCard())
             {
-                turnText.text = "true";
+                turnText.text = "true" + " Turn order: " + turnOrder;
             }
             else
             {
-                turnText.text = "false";
+                turnText.text = "false" + " Turn order: " + turnOrder;
             }
             
         }
@@ -101,6 +101,7 @@ public class GameControl : MonoBehaviour
         c1 = cardCopy.GetComponent<card>();
         dm1 = dialogueManagerCopy.GetComponent<DialogManager>();
         state = GameState.ENEMYTURN;
+
         StartCoroutine(CheckForIllegalMove());
         //p1.printDeck();
     }
