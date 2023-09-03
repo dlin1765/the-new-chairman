@@ -352,6 +352,28 @@ MonoBehaviour:
   m_Spacing: {x: 10, y: 0}
   m_Constraint: 2
   m_ConstraintCount: 1
+--- !u!114 &293864264
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 293864259}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41fc7621aa6e76f439fbd2b9687dde5c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 0}
+  turnOrder: 0
+  started: 0
+  _card: {fileID: 1794486849}
+  player1hand: {fileID: 4405510501462086808}
+  enemy1hand: {fileID: 2093681622}
+  enemy2hand: {fileID: 1465903539}
+  enemy3hand: {fileID: 293864259}
+  _deck: {fileID: 2128865611}
+  enemyHand: 
 --- !u!1 &335079856
 GameObject:
   m_ObjectHideFlags: 0
@@ -1315,6 +1337,10 @@ MonoBehaviour:
   drew: 0
   testText: {fileID: 621180860}
   turnText: {fileID: 224812968}
+  player1hand: {fileID: 0}
+  enemy1hand: {fileID: 0}
+  enemy2hand: {fileID: 0}
+  enemy3hand: {fileID: 0}
   cardTracker: 0
   turnOrder: 0
   swingCD: 1000005.06
@@ -1684,6 +1710,28 @@ MonoBehaviour:
   m_Spacing: {x: 10, y: 0}
   m_Constraint: 2
   m_ConstraintCount: 1
+--- !u!114 &1465903544
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1465903539}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41fc7621aa6e76f439fbd2b9687dde5c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 0}
+  turnOrder: 0
+  started: 0
+  _card: {fileID: 1794486849}
+  player1hand: {fileID: 4405510501462086808}
+  enemy1hand: {fileID: 2093681622}
+  enemy2hand: {fileID: 1465903539}
+  enemy3hand: {fileID: 293864259}
+  _deck: {fileID: 2128865611}
+  enemyHand: 
 --- !u!1001 &1572083479
 PrefabInstance:
   m_ObjectHideFlags: 0

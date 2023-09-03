@@ -131,10 +131,19 @@ public class card : MonoBehaviour
             if(whichHands == 1)
             {
                 enemy1.enemyHand.Add(cardNum);
+
             }
-            // HERE IS WHERE THE OTHER ENEMIES WILL GET THE CARDS BUT I THINK THERES A BETTER WAY TO CODE THIS SO IMMA JUST KEEP IT BLANK FOR NOW
-            CardObjCopy.isPlayerCard = false;
+            else if(whichHands == 2)
+            {
+                enemy2hand.GetComponent<EnemyHandController>().enemyHand.Add(cardNum);
+            }
+            else if(whichHands == 3)
+            {
+                enemy3hand.GetComponent<EnemyHandController>().enemyHand.Add(cardNum);
+            }
             
+            CardObjCopy.isPlayerCard = false;
+            spriteRenderer.sprite = spriteArray[cardNum]; // THIS RIGHT HERE IS WHAT MAKES THE ENEMYCARDS VISIBLE REMOVE THIS LINE LATER
         }
        
         return CardObjCopy;
