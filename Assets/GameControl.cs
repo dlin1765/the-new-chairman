@@ -47,7 +47,7 @@ public class GameControl : MonoBehaviour
 
     public float swingCD = 1000005.05f;
     public float nextSwing = 0.0f;
-
+    public List<string> tempPhraseArr = new List<string>();
     // Start is called before the first frame update
     void Start()
     {
@@ -251,6 +251,81 @@ public class GameControl : MonoBehaviour
         }
      
     }
+
+    public List<string> PlayerRulerDecider(int playedNum)
+    {
+
+        tempPhraseArr.Clear();
+
+        bool dialogue = false;
+        if (playedNum % 13 == 6)
+        {
+            tempPhraseArr.Add("have a nice day");
+        }
+        if (playedNum % 13 == 0)
+        {
+           // Debug.Log("skipped turn");
+        }
+        if (playedNum % 13 == 1)
+        {
+           // Debug.Log("draw two cards");
+        }
+        if (playedNum % 13 == 10)
+        {
+
+            tempPhraseArr.Add("spades");
+           
+            // add functionality to pick a new suit using a random number generator 
+
+        }
+        if (playedNum > 38 && playedNum <= 51)
+        {
+            if (playedNum % 13 == 10)
+            {
+                tempPhraseArr.Add("jack of spades");
+            }
+            else if (playedNum % 13 == 11)
+            {
+                tempPhraseArr.Add("queen of spades");
+            }
+            else if (playedNum % 13 == 12)
+            {
+                tempPhraseArr.Add("king of spades");
+
+            } 
+            else
+            {
+                tempPhraseArr.Add(playedNum % 13 + " of spades");
+            }
+            
+            
+        }
+        /*
+        if (e1.enemyHand.Count == 1)
+        {
+            ds.name = "???";
+            if (dialogue)
+            {
+                ds.dialogue = ds.dialogue + ", I am the new chairman"; ;
+            }
+            else
+            {
+                ds.dialogue = "I am the new chairman";
+            }
+            dialogue = true;
+            // add functionality to suspend this coroutine and go to a win screen
+
+        }
+        if (dialogue)
+        {
+            startWords.Add(ds);
+            dm1.StartDialogue(startWords);
+        }
+        */
+        return tempPhraseArr;
+    }
+
+
     IEnumerator enemyTurn() // 2 
     {
         // implement some kind of coroutine to make it so it pauses between turns 
@@ -341,6 +416,7 @@ public class GameControl : MonoBehaviour
             var tableTransform = t1.transform;
             var enemyTransform = e1.transform;
             int temp = t1.tablesHand.Count;
+            Debug.Log(pickOrder);
             t1.tablesHand.Add(e1.enemyHand[pickOrder]);
             //enemyTransform.GetChild(pickOrder).gameObject.GetComponent<card>().spriteRenderer.sprite = enemyTransform.GetChild(pickOrder).gameObject.GetComponent<card>().spriteArray[e1.enemyHand[pickOrder]];
             enemyTransform.GetChild(pickOrder).gameObject.GetComponent<SpriteRenderer>().sprite = spriteArray[e1.enemyHand[pickOrder]];
@@ -396,6 +472,7 @@ public class GameControl : MonoBehaviour
     {
      
             double timer = 0.0;
+            bool talked = false; 
             while (timer <= 50)
             {
                 timer = timer + 0.1;
@@ -403,11 +480,30 @@ public class GameControl : MonoBehaviour
                 if (v1.isTalking)
                 {
                     timer = 0.0;
+                    talked = true;
                 }
                 // if the player plays any more cards during this time, return it to their hand and penalize them 
 
             // this is where i will check for all the phrases that need to be said and if theyre not all right then the state will switch to player penalty
+                
             }
+        /*
+        if(
+         */
+        // 
+        if(tempPhraseArr.Count == 0 && talked)
+        {
+            Debug.Log("talking");
+        }
+        if (v1.FindPhrases(tempPhraseArr))
+        {
+            Debug.Log("all phrases done!");
+
+        }
+        else
+        {
+            Debug.Log("Missed something");
+        }
 
             state = GameState.ENEMYTURN;
             StartCoroutine(CheckForIllegalMove());
@@ -487,6 +583,8 @@ public class GameControl : MonoBehaviour
             yield return new WaitUntil(() => CheckForSuit());
             state = GameState.ENEMYTURN;
             turnOrder = (turnOrder + 1) % 4;
+            // call the function that compiles the list of all the rules that need to be said 
+            PlayerRulerDecider(t1.tablesHand[t1.tablesHand.Count - 1]);
         }
         else
         {

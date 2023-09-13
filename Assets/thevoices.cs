@@ -9,6 +9,8 @@ public class thevoices : MonoBehaviour
 {
     private KeywordRecognizer recognizer;
     private Dictionary<string, Action> actions = new Dictionary<string, Action>();
+    public List<string> phraseArr = new List<string>();
+   
     public GameObject GameControlCopy;
     public SpriteRenderer renderer;
     GameControl gc;
@@ -30,10 +32,10 @@ public class thevoices : MonoBehaviour
     public float currentLoudness => _currentLoudness;
 
     public bool isTalking = false;
-
+    public List<string> localPhraseArr = new List<string>();
     void Start()
     {
-        
+        Debug.Log(localPhraseArr.Count);
         actions.Add("forward", Forward);
         actions.Add("have a nice day", Seven);
         actions.Add("spades", Seven);
@@ -41,7 +43,18 @@ public class thevoices : MonoBehaviour
         actions.Add("hearts", Seven);
         actions.Add("diamonds", Seven);
         actions.Add("jack of spades", Seven);
-
+        actions.Add("2 of spades", Seven);
+        actions.Add("3 of spades", Seven);
+        actions.Add("4 of spades", Seven);
+        actions.Add("5 of spades", Seven);
+        actions.Add("6 of spades", Seven);
+        actions.Add("7 of spades", Seven);
+        actions.Add("8 of spades", Seven);
+        actions.Add("9 of spades", Seven);
+        actions.Add("10 of spades", Seven);
+        actions.Add("queen of spades", Seven);
+        actions.Add("king of spades", Seven);
+        actions.Add("i am the new chairman", Seven);
         gc = GameControlCopy.GetComponent<GameControl>();
         renderer = this.GetComponent<SpriteRenderer>();
         recognizer = new KeywordRecognizer(actions.Keys.ToArray());
@@ -57,6 +70,19 @@ public class thevoices : MonoBehaviour
         else
             this.enabled = false;
     }
+
+    public bool FindPhrases(List<string> phrases)
+    {
+        for (int i = 0; i < phrases.Count; i++)
+        {
+            if (!localPhraseArr.Contains(phrases[i]))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
     void Update()
     {
         _currentLoudness = GetLoudnessFromAudioClip(Microphone.GetPosition(_microphoneName), _microphoneClip, _sampleWindow);
@@ -108,6 +134,11 @@ public class thevoices : MonoBehaviour
     {
         Debug.Log(speech.text);
         actions[speech.text].Invoke();
+        /*
+            if player turn, add it to the thing
+            if not player turn, penalize 
+        */
+        localPhraseArr.Add(speech.text);
     }
 
 
@@ -118,6 +149,12 @@ public class thevoices : MonoBehaviour
     }
     private void Seven()
     {
-        Debug.Log("smelly man");
+       
     }
+
+    public void Clear()
+    {
+        localPhraseArr.Clear();
+    }
+    
 }
