@@ -40,7 +40,7 @@ public class DialogManager : MonoBehaviour
     public void StartDialogue(List<DialogueSet> d)
     {
         /*
-        for (int i = 0; i < d.Count; i++) // add all the dialogue sets into dialogue list
+        for (int i = 0; i < d.Count; i++) // add all the dialogue sets into dialogue list asdkjfhaksjdfh
         {
             dialogueList.Add(d[i]);
         }
@@ -99,14 +99,15 @@ public class DialogManager : MonoBehaviour
         
         double timer = 0.0;
         
-        while (timer <= 40)
+        while (timer <= 100)
         {
-            timer = timer + 0.1;
+            timer = timer + 0.1;/*
             if(Input.GetKeyDown("space") && isDialogue)
             {
                 timer = 0.0;
                
             }
+            */
             yield return null;
         }
         
