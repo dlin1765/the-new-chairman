@@ -32,8 +32,11 @@ public class DialogManager : MonoBehaviour
     {
         if (Input.GetKeyDown("space") && isDialogue) // if isDialogue is true and the space bar is pressed it calls skip dialogue 
         {
+            StopCoroutine(TimerDialogue());
             skipDialogue();
         }
+
+       
     }
 
 
@@ -65,33 +68,54 @@ public class DialogManager : MonoBehaviour
         {
             dialogueList.Add(d[i]);
         }
+        BeginDialogue();
 
+    }
+    public void StartUnskippableDialogue(DialogueSet d)
+    {
+       // StartCoroutine(RuleDialogue());
+    }
+
+
+    public void BeginDialogue()
+    {
         if (dialogueList.Count > 0) // if there's something in the dialogue list 
         {
-            nameText.text = d[0].name;
-            startingText.text = d[0].dialogue;
+            nameText.text = dialogueList[0].name;
+            startingText.text = dialogueList[0].dialogue;
             dialogueList.RemoveAt(0); // set the text boxes to first dialogue set's stuff and remove it from the list CHANGE THIS BACK TO NON COMMENT
             isDialogue = true;
             startingText.gameObject.SetActive(true);
             nameText.gameObject.SetActive(true);
             box.gameObject.SetActive(true);
-            StartCoroutine(DialogueTimer());
+            StartCoroutine(TimerDialogue());
+        }
+        else if(dialogueList.Count == 0 && isDialogue)
+        {
+            startingText.gameObject.SetActive(false);
+            nameText.gameObject.SetActive(false);
+            box.gameObject.SetActive(false);
+            isDialogue = false;
+            if (firstTalk)
+            {
+                EnemyHandController ai = enemyAI.GetComponent<EnemyHandController>();
+                //ai.animator.SetBool("started", true);
+
+                GameControl gC = GameControllerCopy.GetComponent<GameControl>();
+                gC.StartGame();
+                firstTalk = false;
+            }
         }
         else
         {
             isDialogue = false;
         }
-
-    }
-    public void StartUnskippableDialogue(DialogueSet d)
-    {
-        StartCoroutine(RuleDialogue());
     }
 
-    IEnumerator RuleDialogue()
+    IEnumerator TimerDialogue()
     {
-
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(2f);
+        BeginDialogue();
     }
     IEnumerator DialogueTimer()
     {   
@@ -119,6 +143,7 @@ public class DialogManager : MonoBehaviour
     public void skipDialogue()
     {
         //Debug.Log("good morning");
+        
         if (dialogueList.Count > 0) // if the dialogue list has stuff in it it sets the text the second thing bc from start dialogue it removes the 
         {
             
@@ -126,7 +151,7 @@ public class DialogManager : MonoBehaviour
             startingText.text = dialogueList[0].dialogue;
             dialogueList.RemoveAt(0);
             isDialogue = true;
-            StartCoroutine(DialogueTimer());
+            //StartCoroutine(DialogueTimer());
         }
         else if (dialogueList.Count == 0) // if its zero, it destroys the boxes 
         {
